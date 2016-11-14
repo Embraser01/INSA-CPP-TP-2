@@ -9,11 +9,17 @@ ListRoute::ListRoute(size_t sizeInit)
 {
     this->cardMax=sizeInit;
     this->currentCard=0;
-
+    this->routes = new Route*[cardMax];
 }
 
 bool ListRoute::addRoute(const Route* route)
 {
+    if (this->cardMax > this->currentCard){
+        routes [currentCard++]= route;
+    }
+    else {
+
+    }
 
 }
 
