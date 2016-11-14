@@ -21,6 +21,7 @@ public:
 
     bool addSimpleRoute(const SimpleRoute* simpleRoute);
 
+    virtual ~ComposedRoute();
 private:
     ListRoute* routes;
 };

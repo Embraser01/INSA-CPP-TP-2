@@ -30,6 +30,7 @@ public:
 
     virtual void display();
 
+    virtual ~SimpleRoute();
 
 private:
     char *departure;

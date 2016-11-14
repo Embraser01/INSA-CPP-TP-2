@@ -31,6 +31,8 @@ public:
 
     Route* getElement(size_t i);
 
+    virtual ~ListRoute();
+
 private:
     Route** routes;
     size_t cardMax;

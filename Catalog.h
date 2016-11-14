@@ -23,6 +23,8 @@ public:
 
     bool addRoute(const Route* route);
 
+    virtual ~Catalog();
+
 private:
     ListRoute* routes;
 };
