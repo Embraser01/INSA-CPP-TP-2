@@ -98,4 +98,8 @@ fabric.properties
 .idea/misc.xml
 .idea/modules.xml
 
-!TU/**/*
+
+*.iml
+
+.depend
+out
