@@ -24,9 +24,15 @@ public:
         return transport;
     }
 
-    virtual char *getDeparture() const;
+    virtual char *getDeparture() const
+    {
+        return departure;
+    }
 
-    virtual char *getArrival() const;
+    virtual char *getArrival() const
+    {
+        return arrival;
+    }
 
     virtual void display();
 
