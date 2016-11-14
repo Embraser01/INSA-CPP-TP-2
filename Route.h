@@ -16,6 +16,8 @@ public:
     virtual char* getArrival() const = 0;
     virtual void display() = 0;
 
+    virtual ~Route();
+
 };
 
 #endif //TP2_C_ROUTE_H
