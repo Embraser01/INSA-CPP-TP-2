@@ -15,6 +15,7 @@ all: out
 
 out: $(OBJS)
 	$(CXX) $(LDFLAGS) -o out $(OBJS) -L $(LDLIBS)
+
 #On utilise le preporcesseur de g++ pour generer les dependances
 #l'option - MM genere une regle compatible avec make
 #cette regle decrit les dependances du fichier source
