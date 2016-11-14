@@ -1,12 +1,9 @@
-//
-// Created by Lucas ONO on 14/11/16.
-//
 /*************************************************************************
                            SimpleRoute  -  description
                              -------------------
     début                : 14 Nov 2016
     copyright            : (C) 2016 par lucasono
-    e-mail               : lucas.okumura--ono@insa--lyon.fr
+    e-mail               : lucas.okumura-ono@insa-lyon.fr
 *************************************************************************/
 
 //---------- Réalisation du module <SimpleRoute> (fichier SimpleRoute.cpp) ---------------
