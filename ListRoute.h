@@ -19,7 +19,7 @@
 class ListRoute
 {
 public:
-    ListRoute();
+    ListRoute(size_t sizeInit);
 
     bool addRoute(const Route* route);
 
@@ -33,7 +33,9 @@ public:
 
 private:
     Route** routes;
-    size_t size;
+    size_t cardMax;
+    unsigned int currentCard;
+
 
 
 };

@@ -2,10 +2,13 @@
 // Created by gmarcelin on 14/11/16.
 //
 
+
 #include "ListRoute.h"
 
-ListRoute::ListRoute()
+ListRoute::ListRoute(size_t sizeInit)
 {
+    this->cardMax=sizeInit;
+    this->currentCard=0;
 
 }
 
