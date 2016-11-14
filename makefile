@@ -1,8 +1,8 @@
 CC=gcc
 CXX=g++
 RM=rm -f
-CPPFLAGS=-g $(shell root-config --cflags)
-LDFLAGS=-g $(shell root-config --ldflags)
+CPPFLAGS=-g -m64
+LDFLAGS=-g -m64
 LDLIBS=-lm
 
 SRCS=main.cpp Route.cpp
