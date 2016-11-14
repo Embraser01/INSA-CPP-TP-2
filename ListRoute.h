@@ -19,6 +19,8 @@
 class ListRoute
 {
 public:
+    ListRoute();
+
     bool addRoute(const Route* route);
 
     ListRoute* getDepartureFrom(const char* city);

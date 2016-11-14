@@ -4,22 +4,30 @@
 
 #include "ListRoute.h"
 
-bool ListeRoute::addRoute(const Route* route){
+ListRoute::ListRoute()
+{
 
 }
 
-ListRoute* ListeRoute::getDepartureFrom(const char* city){
+bool ListRoute::addRoute(const Route* route)
+{
 
 }
 
-ListRoute* ListeRoute::getArrivalTo(const char* city){
-
+ListRoute* ListRoute::getDepartureFrom(const char* city)
+{
+    for (int i=0;i++;)
 }
 
-size_t ListeRoute::getSize() const{
-
+ListRoute* ListRoute::getArrivalTo(const char* city)
+{
 }
 
-Route* ListeRoute::getElement(size_t i){
+size_t ListRoute::getSize() const
+{
+}
 
-};
+Route* ListRoute::getElement(size_t i)
+{
+
+}
