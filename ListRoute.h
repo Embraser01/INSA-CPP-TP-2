@@ -1,46 +1,58 @@
-
 /*************************************************************************
                            ListRoute  -  Modélise une liste de trajet
                              -------------------
     début                : 14/11/16
-    copyright            : (C) 2016 par ...
-    e-mail               :
 *************************************************************************/
 
-//---------- Interface du module <ListRoute> (fichier ListRoute.h) -------------------
 #ifndef TP2_C_LISTROUTE_H
 #define TP2_C_LISTROUTE_H
 
-//Pas sur !!! :)
+//------------------------------------------- Interfaces utilisées, Types, Constantes
+
 #include <iostream>
 #include <cstring>
 
 
 class ListRoute
 {
+
+//--------------------------------------- Méthodes publiques
+
 public:
-    ListRoute(size_t sizeInit);
 
-    bool addRoute(const Route* route);
 
-    ListRoute* getDepartureFrom(const char* city);
+    bool addRoute(const Route *route);
 
-    ListRoute* getArrivalTo(const char* city);
+    ListRoute *getDepartureFrom(const char *city);
+
+    ListRoute *getArrivalTo(const char *city);
 
     size_t getSize() const;
 
-    Route* getElement(size_t i);
+    Route *getElement(size_t i);
+
+
+    //--------------------------------------- Redéfinition d'opérateurs
+
+
+    //--------------------------------------- Constructeurs - destructeur
+
+    ListRoute(size_t sizeInit);
 
     virtual ~ListRoute();
 
+//--------------------------------------- Méthodes protégées ou privées
+
+protected:
 private:
-    Route** routes;
-    size_t cardMax;
-    unsigned int currentCard;
 
+//--------------------------------------- Attributs et types protégés ou privés
 
-
+protected:
+private:
+    Route **routes; // Tableau contenant les routes
+    size_t cardMax; // Taille du tableau
+    unsigned int currentCard; // Nombre d'élements dans le tableau
 };
-
 
 #endif //TP2_C_LISTROUTE_H
