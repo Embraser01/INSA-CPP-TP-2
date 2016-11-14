@@ -24,8 +24,10 @@ public:
     bool addRoute(const Route *route);
 
     ListRoute *getDepartureFrom(const char *city);
+    //Contrat: city est une chaine de caracteres
 
     ListRoute *getArrivalTo(const char *city);
+    //Contrat: city est une chaine de caracteres
 
     size_t getSize() const;
 
