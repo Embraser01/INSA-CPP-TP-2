@@ -9,8 +9,14 @@
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
+using namespace std;
+
+#include <cstring>
+#include <iostream>
+
 #include "Route.h"
 #include "ListRoute.h"
+#include "SimpleRoute.h"
 
 class ComposedRoute : public Route
 {
@@ -35,6 +41,8 @@ public:
 
 
     //--------------------------------------- Constructeurs - destructeur
+
+    ComposedRoute();
 
     virtual ~ComposedRoute();
 

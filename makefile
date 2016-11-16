@@ -1,35 +1,58 @@
-CC=gcc
-CXX=g++
-RM=rm -f
-CPPFLAGS=-g -m64
-LDFLAGS=-g -m64
-LDLIBS=-lm
+ifdef VERBOSE
+	Q =
+	E = @true
+else
+	Q = @
+	E = @echo
+endif
 
-SRCS=main.cpp Route.cpp
-OBJS=$(subst .cpp,.o,$(SRCS))
+CXXFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.cpp")
+
+INFILES := $(CFILES) $(CXXFILES)
+
+OBJFILES := $(CXXFILES:src/%.cpp=%)
+DEPFILES := $(CXXFILES:src/%.cpp=%)
+OFILES := $(OBJFILES:%=obj/%.o)
+
+BINFILE = insa_tp_cpp_2
+
+LDFLAGS =
 
 
-.PHONY: clean
+CXXFLAGS =  -Wall -pedantic --std=c++11
+ifdef DEBUG
+	CXXFLAGS := $(CXXFLAGS) -g
+endif
 
-all: out
+DEPDIR = deps
+all: $(BINFILE)
+ifeq ($(MAKECMDGOALS),)
+-include Makefile.dep
+endif
+ifneq ($(filter-out clean, $(MAKECMDGOALS)),)
+-include Makefile.dep
+endif
 
-out: $(OBJS)
-	$(CXX) $(LDFLAGS) -o out $(OBJS) -L $(LDLIBS)
+CXX = g++
 
-#On utilise le preporcesseur de g++ pour generer les dependances
-#l'option - MM genere une regle compatible avec make
-#cette regle decrit les dependances du fichier source
-#et ignore les interfaces qui sont dans les entetes du systeme
-depend: .depend
 
-.depend: $(SRCS)
-	rm -f ./.depend
-	$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
+-include Makefile.local
 
+.PHONY: clean all depend
+.SUFFIXES:
+obj/%.o: src/%.cpp
+	$(E) C++-compiling $<
+	$(Q)if [ ! -d `dirname $@` ]; then mkdir -p `dirname $@`; fi
+	$(Q)$(CXX) -o $@ -c $< $(CXXFLAGS)
+
+Makefile.dep: $(CXXFILES)
+	$(E) Depend
+	$(Q)for i in $(^); do $(CXX) $(CXXFLAGS) -MM "$${i}" -MT obj/`basename $${i%.*}`.o; done > $@
+
+
+$(BINFILE): $(OFILES)
+	$(E) Linking $@
+	$(Q)$(CXX) -o $@ $(OFILES) $(LDFLAGS)
 clean:
-	$(RM) $(OBJS)
-
-dist-clean: clean
-	$(RM) *~ .depend
-
-include .depend
+	$(E) Removing files
+	$(Q)rm -f $(BINFILE) obj/* Makefile.dep

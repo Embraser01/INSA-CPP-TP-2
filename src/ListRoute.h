@@ -12,6 +12,8 @@
 #include <iostream>
 #include <cstring>
 
+#include "Route.h"
+
 
 class ListRoute
 {
@@ -21,7 +23,7 @@ class ListRoute
 public:
 
 
-    bool addRoute(const Route *route);
+    bool addRoute(/*const ?? Passe pas avec une compilation non permissive*/ Route *route);
 
     ListRoute *getDepartureFrom(const char *city);
     //Contrat: city est une chaine de caracteres

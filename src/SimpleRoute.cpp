@@ -13,6 +13,7 @@
 
 //------------------------------------------------------ Include personnel
 #include "SimpleRoute.h"
+
 #define MAP
 ///////////////////////////////////////////////////////////////////  PRIVE
 //------------------------------------------------------------- Constantes
@@ -33,24 +34,27 @@
 //} //----- fin de nom
 
 //////////////////////////////////////////////////////////////////  PUBLIC
-SimpleRoute::SimpleRoute(const char * departure,
-                         const char * arrival,
-                         const char * transport)
+SimpleRoute::SimpleRoute(const char *departure,
+                         const char *arrival,
+                         const char *transport)
 {
-    this.departure = new char[strlen(departure)];
-    strcpy(this.departure,departure);
-    this.arrival = new char[strlen(arrival)];
-    strcpy(this.arrival,arrival);
-    this.transport = new char[strlen(transport)];
-    strcpy(this.arrival,arrival);
+    this->departure = new char[strlen(departure) + 1];
+    strcpy(this->departure, departure);
+
+    this->arrival = new char[strlen(arrival) + 1];
+    strcpy(this->arrival, arrival);
+
+    this->transport = new char[strlen(transport) + 1];
+    strcpy(this->transport, arrival);
+
 #ifdef MAP
-    cout<<"Appel au constructeur de <SimpleRoute>"<<endl;
+    cout << "Appel au constructeur de <SimpleRoute>" << endl;
 #endif
 }
 
 void SimpleRoute::display()
 {
-    cout<<"de "<<departure<<" vers "<<arrival<<endl;
+    cout << "De " << departure << " vers " << arrival << endl;
 }
 
 
@@ -58,7 +62,7 @@ SimpleRoute::~SimpleRoute()
 {
     delete[] departure;
     delete[] arrival;
-    delete[] trasport;
+    delete[] transport;
 }
 //---------------------------------------------------- Fonctions publiques
 //type Nom ( liste de paramètres )

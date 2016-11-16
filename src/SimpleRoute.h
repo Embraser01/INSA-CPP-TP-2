@@ -9,6 +9,11 @@
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
+using namespace std;
+
+#include <iostream>
+#include <cstring>
+
 #include "Route.h"
 
 class SimpleRoute : public Route

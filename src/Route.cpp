@@ -1,8 +1,14 @@
 /*************************************************************************
-                           ComposedRoute  -  Description
+                           Route  -  Description
                              -------------------
     début                : 14/11/2016
     e-mail               : $EMAIL
 *************************************************************************/
 
-#include "ComposedRoute.h"
+#include "Route.h"
+
+
+Route::~Route()
+{
+
+}
