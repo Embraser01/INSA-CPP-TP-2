@@ -8,13 +8,11 @@ endif
 
 CXXFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.cpp")
 
-INFILES := $(CFILES) $(CXXFILES)
-
 OBJFILES := $(CXXFILES:src/%.cpp=%)
 DEPFILES := $(CXXFILES:src/%.cpp=%)
 OFILES := $(OBJFILES:%=obj/%.o)
 
-BINFILE = insa_tp_cpp_2
+BINFILE = app.out
 
 LDFLAGS =
 
