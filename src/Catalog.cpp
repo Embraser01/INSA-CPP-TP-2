@@ -74,9 +74,7 @@ void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 
 bool Catalog::addRoute(const Route *route)
 {
-
-    // TODO Fix the const problem
-    return this->routes->addRoute((Route *) route);
+    return this->routes->addRoute(route);
 }
 
 Catalog::Catalog()
