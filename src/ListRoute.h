@@ -18,15 +18,17 @@ using namespace std;
 
 #define DEFAULT_LIST_SIZE 10
 
+
+#define DELTA_LIST_SIZE 5
+//Pour l'ajustement du tab
+
 class ListRoute
 {
 
 //--------------------------------------- Méthodes publiques
 
 public:
-
-
-    bool addRoute(const Route *route);
+    void addRoute(const Route *route);
 
     ListRoute *getDepartureFrom(const char *city);
     //Contrat: city est une chaine de caracteres
