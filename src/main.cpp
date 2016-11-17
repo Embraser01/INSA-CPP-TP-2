@@ -4,7 +4,7 @@ using namespace std;
 
 #define MAP
 #define BUFFER_SIZE 1000
-#define MAX_CONSOLE_LINES 30
+#define MAX_CONSOLE_LINES 20
 
 
 #include "Catalog.h"

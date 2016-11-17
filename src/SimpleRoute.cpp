@@ -63,6 +63,10 @@ SimpleRoute::~SimpleRoute()
     delete[] departure;
     delete[] arrival;
     delete[] transport;
+
+#ifdef MAP
+    cout << "Appel au destructeur de <SimpleRoute>" << endl;
+#endif
 }
 //---------------------------------------------------- Fonctions publiques
 //type Nom ( liste de paramètres )

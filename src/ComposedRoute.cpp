@@ -65,6 +65,8 @@ ComposedRoute::ComposedRoute(const SimpleRoute *route)
 
 ComposedRoute::~ComposedRoute()
 {
+
+    delete routes;
 #ifdef MAP
     cout << "Appel au destructeur de <ComposedRoute>" << endl;
 #endif
