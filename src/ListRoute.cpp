@@ -6,7 +6,6 @@
 #include "ListRoute.h"
 
 
-
 void ListRoute::addRoute(const Route *route)
 {
     if (this->cardMax > this->currentCard)
@@ -15,22 +14,27 @@ void ListRoute::addRoute(const Route *route)
         // Ceci n'est pas autorisé sans cast avec l'option -fpermissive
 
         routes[currentCard++] = (Route *) route;
-    }else{
+    } else
+    {
 
-        Route **newList = new Route*[cardMax+DELTA_LIST_SIZE];
-        for (int i =0; i<cardMax; i++){
-            newList [i]=routes [i];
+        Route **newList = new Route *[cardMax + DELTA_LIST_SIZE];
+        for (int i = 0; i < cardMax; i++)
+        {
+            newList[i] = routes[i];
         }
-        cardMax+= DELTA_LIST_SIZE;
-        newList [currentCard++]= (Route*) route;
-        routes =newList;
+        cardMax += DELTA_LIST_SIZE;
+        newList[currentCard++] = (Route *) route;
+        routes = newList;
     }
 }
 
 ListRoute *ListRoute::getDepartureFrom(const char *city)
-{ ListRoute departure = ListRoute(DEFAULT_LIST_SIZE);
-    for (int i = 0;i<cardMax; i++){
-       if (routes[i]->getDeparture()==city){
+{
+    ListRoute departure = ListRoute(DEFAULT_LIST_SIZE);
+    for (int i = 0; i < cardMax; i++)
+    {
+        if (routes[i]->getDeparture() == city)
+        {
 
         }
 
@@ -46,12 +50,12 @@ ListRoute *ListRoute::getArrivalTo(const char *city)
 
 size_t ListRoute::getSize() const
 {
-    return 0;
+    return currentCard + 1;
 }
 
 Route *ListRoute::getElement(size_t i)
 {
-    return NULL;
+    return routes[i];
 
 }
 
