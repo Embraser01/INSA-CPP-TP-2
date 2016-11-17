@@ -18,7 +18,7 @@ void ListRoute::addRoute(const Route *route)
     }else{
 
         Route **newList = new Route*[cardMax+DELTA_LIST_SIZE];
-        for (int i =0; i++; i<cardMax){
+        for (int i =0; i<cardMax; i++){
             newList [i]=routes [i];
         }
         cardMax+= DELTA_LIST_SIZE;
@@ -29,10 +29,10 @@ void ListRoute::addRoute(const Route *route)
 
 ListRoute *ListRoute::getDepartureFrom(const char *city)
 { ListRoute departure = ListRoute(DEFAULT_LIST_SIZE);
-    for (int i = 0; i++;i<cardMax){
-      //  if (routes[i].getDeparture()==*city){
+    for (int i = 0;i<cardMax; i++){
+       if (routes[i]->getDeparture()==city){
 
-        //}
+        }
 
     }
 
