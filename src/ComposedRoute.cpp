@@ -46,7 +46,8 @@ bool ComposedRoute::addSimpleRoute(const SimpleRoute *simpleRoute)
 
     if (strcasecmp(routes->getElement(routes->getSize() - 1)->getArrival(), simpleRoute->getDeparture()) == 0)
     {
-        return routes->addRoute(simpleRoute);
+        routes->addRoute(simpleRoute);
+        return true;
     }
 
     return false;
