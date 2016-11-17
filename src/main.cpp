@@ -28,7 +28,7 @@ void clearConsole()
 void typeToContinue()
 {
     cout << "Appuyer sur ENTREE pour continuer..." << endl;
-    cin.ignore(256,'\n');
+    cin.ignore(256, '\n');
     cin.get();
 }
 
@@ -87,14 +87,10 @@ void addRoute(Catalog *catalog)
             return;
         }
 
-        if (catalog->addRoute(route))
-        {
-            cout << "Le trajet suivant a bien été ajouté : ";
-            route->display();
-        } else
-        {
-            cerr << "Erreur lors de l'insertion !" << endl;
-        }
+        catalog->addRoute(route);
+
+        cout << "Le trajet suivant a bien été ajouté : ";
+        route->display();
 
     } else
     { // Trajet composé
@@ -128,14 +124,11 @@ void addRoute(Catalog *catalog)
             partial = strtok_r(NULL, ";", &save_ptr);
         }
 
-        if (catalog->addRoute(composedRoute))
-        {
-            cout << "Le trajet suivant a bien été ajouté : ";
-            composedRoute->display();
-        } else
-        {
-            cerr << "Erreur lors de l'insertion !" << endl;
-        }
+
+        catalog->addRoute(composedRoute);
+        cout << "Le trajet suivant a bien été ajouté : ";
+        composedRoute->display();
+
     }
 
     typeToContinue();

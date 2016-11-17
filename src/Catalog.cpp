@@ -72,9 +72,9 @@ void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 }
 
 
-bool Catalog::addRoute(const Route *route)
+void Catalog::addRoute(const Route *route)
 {
-    return this->routes->addRoute(route);
+    routes->addRoute(route);
 }
 
 Catalog::Catalog()
