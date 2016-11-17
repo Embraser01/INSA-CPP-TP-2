@@ -28,22 +28,37 @@ char *ComposedRoute::getArrival() const
 
 void ComposedRoute::display()
 {
-    cout << "WIP" << endl;
+    // On affiche l'ensemble des trajets
+
+    for (unsigned int i = 0; i < routes->getSize() - 1; ++i)
+    { // Jusqu'à l'avant dernier
+        routes->getElement(i)->display();
+        cout << " — ";
+    }
+
+    routes->getElement(routes->getSize() - 1)->display();
 }
 
 
 bool ComposedRoute::addSimpleRoute(const SimpleRoute *simpleRoute)
 {
-    return false;
+    return routes->addRoute(simpleRoute);
 }
 
 
-ComposedRoute::ComposedRoute()
+ComposedRoute::ComposedRoute(const SimpleRoute *route)
 {
+    routes = new ListRoute();
+    routes->addRoute(route);
 
+#ifdef MAP
+    cout << "Appel au constructeur de <ComposedRoute>" << endl;
+#endif
 }
 
 ComposedRoute::~ComposedRoute()
 {
-
+#ifdef MAP
+    cout << "Appel au destructeur de <ComposedRoute>" << endl;
+#endif
 }

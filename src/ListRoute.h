@@ -14,6 +14,7 @@
 
 #include "Route.h"
 
+#define DEFAULT_LIST_SIZE 10
 
 class ListRoute
 {
@@ -23,7 +24,7 @@ class ListRoute
 public:
 
 
-    bool addRoute(/*const ?? Passe pas avec une compilation non permissive*/ Route *route);
+    bool addRoute(const Route *route);
 
     ListRoute *getDepartureFrom(const char *city);
     //Contrat: city est une chaine de caracteres
@@ -41,7 +42,7 @@ public:
 
     //--------------------------------------- Constructeurs - destructeur
 
-    ListRoute(size_t sizeInit);
+    ListRoute(size_t sizeInit = DEFAULT_LIST_SIZE);
 
     virtual ~ListRoute();
 

@@ -5,18 +5,15 @@
 
 #include "ListRoute.h"
 
-ListRoute::ListRoute(size_t sizeInit)
-{
-    this->cardMax = sizeInit;
-    this->currentCard = 0;
-    this->routes = new Route *[cardMax];
-}
 
-bool ListRoute::addRoute(Route *route)
+bool ListRoute::addRoute(const Route *route)
 {
     if (this->cardMax > this->currentCard)
     {
-        routes[currentCard++] = route;
+        // Ici on cast pour pouvoir copier la valeur du pointeur dans le tableau
+        // Ceci n'est pas autorisé sans cast avec l'option -fpermissive
+
+        routes[currentCard++] = (Route *) route;
     }
     // TODO Faire en cas de tableau plein
     return false;
@@ -46,7 +43,22 @@ Route *ListRoute::getElement(size_t i)
 
 }
 
+ListRoute::ListRoute(size_t sizeInit)
+{
+    this->cardMax = sizeInit;
+    this->currentCard = 0;
+    this->routes = new Route *[cardMax];
+
+#ifdef MAP
+    cout << "Appel au constructeur de <ListRoute>" << endl;
+#endif
+}
+
+
 ListRoute::~ListRoute()
 {
-
+#ifdef MAP
+    cout << "Appel au destructeur de <ListRoute>" << endl;
+#endif
 }
+

@@ -42,7 +42,7 @@ public:
 
     //--------------------------------------- Constructeurs - destructeur
 
-    ComposedRoute();
+    ComposedRoute(const SimpleRoute* route);
 
     virtual ~ComposedRoute();
 

@@ -10,5 +10,7 @@
 
 Route::~Route()
 {
-
+#ifdef MAP
+    cout << "Appel au destructeur de <Route>" << endl;
+#endif
 }

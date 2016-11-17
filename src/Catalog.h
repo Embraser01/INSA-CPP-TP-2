@@ -10,6 +10,11 @@
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
+using namespace std;
+
+#include <iostream>
+#include <cstring>
+
 #include "ListRoute.h"
 #include "Route.h"
 
@@ -38,6 +43,8 @@ public:
     //--------------------------------------- Constructeurs - destructeur
 
 
+    Catalog();
+
     virtual ~Catalog();
 
 
@@ -45,6 +52,10 @@ public:
 
 protected:
 private:
+    void display(ListRoute* listRoute, const char *departureCity, const char *arrivalCity);
+    // Cette méthode affiche le contenu de listRoute, elle est privé
+    // car doit afficher uniquement les routes lui appartenant
+
 
 //--------------------------------------- Attributs et types protégés ou privés
 
