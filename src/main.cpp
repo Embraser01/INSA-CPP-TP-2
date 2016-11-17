@@ -27,7 +27,8 @@ void clearConsole()
 
 void typeToContinue()
 {
-    cout << "Appuyer sur une touche pour continuer..." << endl;
+    cout << "Appuyer sur ENTREE pour continuer..." << endl;
+    cin.ignore(256,'\n');
     cin.get();
 }
 
@@ -203,6 +204,27 @@ void searchRoute(Catalog *catalog, bool advance = false)
     typeToContinue();
 }
 
+void about()
+{
+    clearConsole();
+    cout << "#----------------------------------------------------------------------------------------------"
+         << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\tApplication : Ultra promo voyage" << endl
+         << "#\tAuteurs : " << endl
+         << "#\t" << "\tMarc-Antoine FERNANDES" << endl
+         << "#\t" << "\tGuillaume MARCELIN" << endl
+         << "#\t" << "\tLucas ONO" << endl
+         << "#\t" << endl
+         << "#\tCréé pour le TP C++ n.2 - INSA Lyon - 2016" << endl
+         << "#\t" << endl
+         << "#----------------------------------------------------------------------------------------------"
+         << endl;
+
+    typeToContinue();
+}
+
 int main()
 {
     Catalog *catalog = new Catalog();
@@ -246,6 +268,9 @@ int main()
                 break;
             case '4':
                 searchRoute(catalog, true);
+                break;
+            case 'a':
+                about();
                 break;
             default:
                 break;
