@@ -9,10 +9,10 @@
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
-using namespace std;
-
 #include <iostream>
 #include <cstring>
+
+using namespace std;
 
 #include "Route.h"
 

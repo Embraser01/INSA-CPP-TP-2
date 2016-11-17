@@ -16,28 +16,25 @@ void Catalog::display(ListRoute *listRoute, const char *departureCity, const cha
     if (departureCity != NULL)
     { // Si c'est une recherche
 
-        cout << "Trajets existant entre " << departureCity << " et " << arrivalCity << " :" << endl;
+        cout << "#\tTrajets existant entre " << departureCity << " et " << arrivalCity << " :" << endl;
     } else
     {
-        cout << "Trajets disponibles dans le catalogue" << endl;
+        cout << "#\tTrajets disponibles dans le catalogue" << endl;
     }
 
     if (listRoute->getSize() == 0)
     { // Si la liste est vide alors on affiche un message et stop la fonction
-        cout << "Aucun trajet n'a été trouvé" << endl;
+        cout << "#\t" << "\tAucun trajet n'a été trouvé" << endl;
     }
 
     // On affiche l'ensemble des trajets
 
     for (unsigned int i = 0; i < listRoute->getSize(); ++i)
     {
-        cout << "\t"; // Tabulation
+        cout << "#\t\t"; // Tabulation
         listRoute->getElement(i)->display();
         cout << endl;
     }
-
-    cout << "Fin de la liste" << endl
-         << "-----------------------------------------------" << endl;
 }
 
 
@@ -65,6 +62,13 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
     display(searchResults, departureCity, arrivalCity);
 
     delete searchResults;
+}
+
+void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
+{
+    // TODO Advance query
+
+    query(departureCity, arrivalCity);
 }
 
 

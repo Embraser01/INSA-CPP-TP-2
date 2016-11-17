@@ -12,6 +12,8 @@
 #include <iostream>
 #include <cstring>
 
+using namespace std;
+
 #include "Route.h"
 
 #define DEFAULT_LIST_SIZE 10
