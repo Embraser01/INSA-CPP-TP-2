@@ -41,7 +41,7 @@ public:
 
     virtual void display();
     // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard le trajet sous la forme suivante
-    //                  Départ de <Gare départ> pour <Gare arrivée> par <Moyen de transport>
+    //                  Départ de <Ville départ> pour <Ville arrivée> par <Moyen de transport>
 
 
     //--------------------------------------- Redéfinition d'opérateurs
@@ -66,8 +66,8 @@ private:
 
 protected:
 private:
-    char *departure; // Gare de départ
-    char *arrival; // Gare d'arrivée
+    char *departure; // Ville de départ
+    char *arrival; // Ville d'arrivée
     char *transport; // Moyen de transport
 };
 

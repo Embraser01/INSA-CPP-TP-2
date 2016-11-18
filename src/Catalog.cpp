@@ -52,7 +52,7 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
 
         if (strcasecmp(tmp->getDeparture(), departureCity) == 0
             && strcasecmp(tmp->getArrival(), arrivalCity) == 0)
-        { // Si les gares de départ et d'arrivée correspondent à la recherche
+        { // Si les villes de départ et d'arrivée correspondent à la recherche
 
             searchResults->addRoute(tmp);
         }

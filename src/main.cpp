@@ -33,12 +33,45 @@ void typeToContinue()
 }
 
 
+char *trim(char *str)
+{
+    size_t size = strlen(str);
+    unsigned int first = 0;
+    unsigned int last = (unsigned int) size;
+
+    bool first_found = false;
+    bool last_found = false;
+
+    for (unsigned int i = 0; i < size && (!first_found || !last_found); ++i)
+    {
+        if (!first_found && str[i] == ' ') first = i;
+        if (!first_found && str[i] != ' ') first_found = true;
+
+        if (!last_found && str[size - i - 1] == ' ') last = (unsigned int) (size - i - 1);
+        if (!last_found && str[size - i - 1] != ' ') last_found = true;
+    }
+
+    size_t newSize = last - first + 1;
+
+    char *newStr = new char[newSize + 1];
+    newStr[newSize] = '\0';
+
+    for (int j = 0; j < newSize; ++j)
+    {
+        newStr[j] = str[j + first];
+    }
+
+    delete[] str;
+    return newStr;
+}
+
+
 SimpleRoute *getSimpleRoute(char *string)
 {
     char *save_ptr;
 
     // On recupère le moyen de transport (avant le '(')
-    char *transport = strtok_r(buff, "(", &save_ptr);
+    char *transport = strtok_r(string, "(", &save_ptr);
 
     // On recupère la ville de départ (avant le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
@@ -48,6 +81,11 @@ SimpleRoute *getSimpleRoute(char *string)
     // On recupère la ville d'arrivée (avant le ')')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
     char *arrival = strtok_r(NULL, ")", &save_ptr);
+
+    // Trim
+    transport = trim(transport);
+    departure = trim(departure);
+    arrival = trim(arrival);
 
 
     if (!strlen(transport) || !strlen(departure) || !strlen(arrival)) return NULL;
@@ -62,7 +100,7 @@ void addRoute(Catalog *catalog)
          << "#\t Ajouter un trajet" << endl
          << "#\t" << endl
          << "#\t" << "\tAjoutez un trajet sous la forme suivante :" << endl
-         << "#\t" << "\t  <Vehicule>(<Ville de départ>, <Ville d'arrivée>)" << endl
+         << "#\t" << "\t  <Vehicule>(<Ville de départ>,<Ville d'arrivée>)" << endl
          << "#\t" << endl
          << "#\t" << "\tPour créer un trajet composé, séparez chaque trajet simple par \";\" " << endl
          << "#\t" << endl
@@ -91,6 +129,7 @@ void addRoute(Catalog *catalog)
 
         cout << "Le trajet suivant a bien été ajouté : ";
         route->display();
+        cout << endl;
 
     } else
     { // Trajet composé
@@ -116,7 +155,7 @@ void addRoute(Catalog *catalog)
                 composedRoute = new ComposedRoute(simpleRoute);
             } else if (!composedRoute->addSimpleRoute(simpleRoute))
             { // Sinon erreur lors de l'ajout de la route
-                cerr << "Erreur lors de l'insertion !" << endl;
+                cerr << "Erreur lors de l'insertion ! Vérifiez que les villes soient correctement rentrées" << endl;
                 typeToContinue();
                 return;
             }
@@ -128,7 +167,7 @@ void addRoute(Catalog *catalog)
         catalog->addRoute(composedRoute);
         cout << "Le trajet suivant a bien été ajouté : ";
         composedRoute->display();
-
+        cout << endl;
     }
 
     typeToContinue();

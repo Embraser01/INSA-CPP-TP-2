@@ -6,7 +6,7 @@
 #include "ListRoute.h"
 
 
-void ListRoute::addRoute(const Route *route)
+/*void ListRoute::addRoute(const Route *route)
 {
     if (this->cardMax > this->currentCard)
     {
@@ -26,6 +26,31 @@ void ListRoute::addRoute(const Route *route)
         newList[currentCard++] = (Route *) route;
         routes = newList;
     }
+}*/
+
+void ListRoute::addRoute(const Route *route)
+{
+    if (this->cardMax <= this->currentCard)
+    { // Si pas assez de place
+
+        cardMax += DELTA_LIST_SIZE;
+
+        Route **newList = new Route *[cardMax];
+
+        // On recopie le contenu de l'ancien tableau
+        for (int i = 0; i < currentCard; i++)
+        {
+            newList[i] = routes[i];
+        }
+
+        delete [] routes;
+        routes = newList;
+    }
+
+    // Ici on cast pour pouvoir copier la valeur du pointeur dans le tableau
+    // Ceci n'est pas autorisé sans cast avec l'option -fpermissive
+
+    routes[currentCard++] = (Route *) route;
 }
 
 ListRoute *ListRoute::getDepartureFrom(const char *city)
@@ -50,7 +75,7 @@ ListRoute *ListRoute::getArrivalTo(const char *city)
 
 size_t ListRoute::getSize() const
 {
-    return currentCard + 1;
+    return currentCard;
 }
 
 Route *ListRoute::getElement(size_t i)

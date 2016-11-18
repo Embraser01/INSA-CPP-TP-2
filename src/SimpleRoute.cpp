@@ -45,7 +45,7 @@ SimpleRoute::SimpleRoute(const char *departure,
     strcpy(this->arrival, arrival);
 
     this->transport = new char[strlen(transport) + 1];
-    strcpy(this->transport, arrival);
+    strcpy(this->transport, transport);
 
 #ifdef MAP
     cout << "Appel au constructeur de <SimpleRoute>" << endl;

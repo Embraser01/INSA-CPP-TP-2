@@ -31,8 +31,8 @@ public:
 
     virtual void display();
     // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard le trajet sous la forme suivante
-    //                  Départ de <Gare départ> pour <Gare arrivée>,
-    //                          le trajet desservira les gares suivantes <Gare n (Transport)>,...
+    //                  Départ de <Ville départ> pour <Ville arrivée>,
+    //                          le trajet desservira les villes suivantes <Ville n (Transport)>,...
 
 
     bool addSimpleRoute(const SimpleRoute *simpleRoute);
