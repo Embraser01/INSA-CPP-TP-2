@@ -31,7 +31,7 @@ void Catalog::display(ListRoute *listRoute, const char *departureCity, const cha
 
     for (unsigned int i = 0; i < listRoute->getSize(); ++i)
     {
-        cout << "#\t\t"; // Tabulation
+        cout << "#\t\t" << i + 1 << ". "; // Tabulation
         listRoute->getElement(i)->display();
         cout << endl;
     }
