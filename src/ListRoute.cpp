@@ -38,7 +38,7 @@ void ListRoute::addRoute(const Route *route)
         Route **newList = new Route *[cardMax];
 
         // On recopie le contenu de l'ancien tableau
-        for (int i = 0; i < currentCard; i++)
+        for (unsigned int i = 0; i < currentCard; i++)
         {
             newList[i] = routes[i];
         }
@@ -56,7 +56,7 @@ void ListRoute::addRoute(const Route *route)
 ListRoute *ListRoute::getDepartureFrom(const char *city)
 {
     ListRoute departure = ListRoute(DEFAULT_LIST_SIZE);
-    for (int i = 0; i < cardMax; i++)
+    for (unsigned int i = 0; i < cardMax; i++)
     {
         if (routes[i]->getDeparture() == city)
         {
@@ -78,10 +78,9 @@ size_t ListRoute::getSize() const
     return currentCard;
 }
 
-Route *ListRoute::getElement(size_t i)
+Route *ListRoute::getElement(size_t i) const
 {
     return routes[i];
-
 }
 
 ListRoute::ListRoute(size_t sizeInit)

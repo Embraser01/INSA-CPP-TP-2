@@ -72,9 +72,18 @@ void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 }
 
 
-void Catalog::addRoute(const Route *route)
+bool Catalog::addRoute(const Route *route)
 {
+    for (unsigned int i = 0; i < routes->getSize(); ++i)
+    {
+        if (*route == *routes->getElement(i))
+        { // Vérifie que la route n'existe pas déjà
+            return false;
+        }
+    }
+
     routes->addRoute(route);
+    return true;
 }
 
 Catalog::Catalog()

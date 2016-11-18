@@ -38,7 +38,7 @@ public:
 
     size_t getSize() const;
 
-    Route *getElement(size_t i);
+    Route *getElement(size_t i) const;
 
 
     //--------------------------------------- Redéfinition d'opérateurs

@@ -26,6 +26,8 @@ public:
 
     //--------------------------------------- Redéfinition d'opérateurs
 
+    virtual bool operator==(const Route& other) const = 0;
+    virtual bool operator!=(const Route& other) const = 0;
 
     //--------------------------------------- Constructeurs - destructeur
 

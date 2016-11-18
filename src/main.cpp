@@ -29,12 +29,12 @@ void typeToContinue()
 {
     cout << "Appuyer sur ENTREE pour continuer..." << endl;
     cin.ignore(256, '\n');
-    cin.get();
 }
-
 
 char *trim(char *str)
 {
+    if (str == NULL) return NULL;
+
     size_t size = strlen(str);
     unsigned int first = 0;
     unsigned int last = (unsigned int) size;
@@ -44,51 +44,59 @@ char *trim(char *str)
 
     for (unsigned int i = 0; i < size && (!first_found || !last_found); ++i)
     {
-        if (!first_found && str[i] == ' ') first = i;
-        if (!first_found && str[i] != ' ') first_found = true;
+        if (!first_found && str[i] != ' ')
+        {
+            first_found = true;
+            first = i;
+        }
 
-        if (!last_found && str[size - i - 1] == ' ') last = (unsigned int) (size - i - 1);
-        if (!last_found && str[size - i - 1] != ' ') last_found = true;
+        if (!last_found && str[size - i - 1] != ' ')
+        {
+            last_found = true;
+            last = (unsigned int) size - i;
+        }
     }
 
-    size_t newSize = last - first + 1;
+    size_t newSize = last - first;
 
     char *newStr = new char[newSize + 1];
     newStr[newSize] = '\0';
 
-    for (int j = 0; j < newSize; ++j)
+    for (unsigned int j = 0; j < newSize; ++j)
     {
         newStr[j] = str[j + first];
     }
 
-    delete[] str;
     return newStr;
 }
 
 
 SimpleRoute *getSimpleRoute(char *string)
 {
+    if (string == NULL) return NULL;
+
     char *save_ptr;
 
     // On recupère le moyen de transport (avant le '(')
-    char *transport = strtok_r(string, "(", &save_ptr);
+    char *transport = trim(strtok_r(string, "(", &save_ptr));
 
     // On recupère la ville de départ (avant le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *departure = strtok_r(NULL, ",", &save_ptr);
+    char *departure = trim(strtok_r(NULL, ",", &save_ptr));
 
 
     // On recupère la ville d'arrivée (avant le ')')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *arrival = strtok_r(NULL, ")", &save_ptr);
-
-    // Trim
-    transport = trim(transport);
-    departure = trim(departure);
-    arrival = trim(arrival);
+    char *arrival = trim(strtok_r(NULL, ")", &save_ptr));
 
 
-    if (!strlen(transport) || !strlen(departure) || !strlen(arrival)) return NULL;
+    if (transport == NULL
+        || departure == NULL
+        || arrival == NULL
+        || !strlen(transport)
+        || !strlen(departure)
+        || !strlen(arrival))
+        return NULL;
 
     return new SimpleRoute(departure, arrival, transport);
 }
@@ -110,7 +118,7 @@ void addRoute(Catalog *catalog)
          << "#----------------------------------------------------------------------------------------------" << endl
          << "Saisisser le trajet : ";
 
-    cin >> buff;
+    cin.getline(buff, BUFFER_SIZE);
 
     if (strpbrk(buff, ";") == NULL)
     { // Si c'est un trajet simple (pas de point virgule dans le buffer)
@@ -125,12 +133,15 @@ void addRoute(Catalog *catalog)
             return;
         }
 
-        catalog->addRoute(route);
-
-        cout << "Le trajet suivant a bien été ajouté : ";
-        route->display();
-        cout << endl;
-
+        if (catalog->addRoute(route))
+        {
+            cout << "Le trajet suivant a bien été ajouté : ";
+            route->display();
+            cout << endl;
+        } else
+        {
+            cerr << "Ce trajet existe déjà !" << endl;
+        };
     } else
     { // Trajet composé
         char *save_ptr;
@@ -164,10 +175,15 @@ void addRoute(Catalog *catalog)
         }
 
 
-        catalog->addRoute(composedRoute);
-        cout << "Le trajet suivant a bien été ajouté : ";
-        composedRoute->display();
-        cout << endl;
+        if (catalog->addRoute(composedRoute))
+        {
+            cout << "Le trajet suivant a bien été ajouté : ";
+            composedRoute->display();
+            cout << endl;
+        } else
+        {
+            cerr << "Ce trajet existe déjà !" << endl;
+        };
     }
 
     typeToContinue();
@@ -205,18 +221,18 @@ void searchRoute(Catalog *catalog, bool advance = false)
          << "#----------------------------------------------------------------------------------------------" << endl
          << "Saisisser la recherche : ";
 
-    cin >> buff;
+    cin.getline(buff, BUFFER_SIZE);
 
     char *save_ptr;
 
     // On recupère la ville de départ (avant le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *departure = strtok_r(buff, ",", &save_ptr);
+    char *departure = trim(strtok_r(buff, ",", &save_ptr));
 
 
     // On recupère la ville d'arrivée (après le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *arrival = strtok_r(NULL, "", &save_ptr);
+    char *arrival = trim(strtok_r(NULL, "", &save_ptr));
 
     clearConsole();
     cout << "#----------------------------------------------------------------------------------------------" << endl
@@ -280,7 +296,10 @@ int main()
              << "#----------------------------------------------------------------------------------------------"
              << endl
              << "Saisisser l'option voulue : ";
-        cin >> buff;
+        cin.getline(buff, BUFFER_SIZE);
+
+        // Si plus d'1 caractère on recommence
+        if (strlen(buff) > 1) continue;
 
         if (buff[0] == 'q')
         { // S'il veut quitter, on quitte imediatement

@@ -58,6 +58,24 @@ void SimpleRoute::display()
 }
 
 
+bool SimpleRoute::operator==(const Route &other) const
+{
+    const SimpleRoute *other_ptr = dynamic_cast<const SimpleRoute *>(&other);
+
+    // Pas du même type donc forcement different
+    if (other_ptr == NULL) return false;
+
+    return strcasecmp(transport, other_ptr->transport) == 0
+           && strcasecmp(departure, other_ptr->departure) == 0
+           && strcasecmp(arrival, other_ptr->arrival) == 0;
+}
+
+bool SimpleRoute::operator!=(const Route &other) const
+{
+    return !(*this == other);
+}
+
+
 SimpleRoute::~SimpleRoute()
 {
     delete[] departure;

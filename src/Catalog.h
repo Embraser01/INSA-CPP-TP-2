@@ -34,7 +34,7 @@ public:
 
     void advanceQuery(const char *departureCity, const char *arrivalCity);
 
-    void addRoute(const Route *route);
+    bool addRoute(const Route *route);
 
 
     //--------------------------------------- Redéfinition d'opérateurs
