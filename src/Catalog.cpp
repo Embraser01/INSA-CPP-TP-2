@@ -42,7 +42,7 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
 {
     // On créé une liste de la même taille du catalogue existant pour optimiser les performances
     // car pas besoin de recopier le tableau, et la recherche est stockée en mémoire que temporairement
-    ListRoute *searchResults = new ListRoute(routes->getSize());
+    ListRoute *searchResults = new ListRoute(routes->getSize(), false);
 
     Route *tmp;
 

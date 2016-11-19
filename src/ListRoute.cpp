@@ -6,28 +6,6 @@
 #include "ListRoute.h"
 
 
-/*void ListRoute::addRoute(const Route *route)
-{
-    if (this->cardMax > this->currentCard)
-    {
-        // Ici on cast pour pouvoir copier la valeur du pointeur dans le tableau
-        // Ceci n'est pas autorisé sans cast avec l'option -fpermissive
-
-        routes[currentCard++] = (Route *) route;
-    } else
-    {
-
-        Route **newList = new Route *[cardMax + DELTA_LIST_SIZE];
-        for (int i = 0; i < cardMax; i++)
-        {
-            newList[i] = routes[i];
-        }
-        cardMax += DELTA_LIST_SIZE;
-        newList[currentCard++] = (Route *) route;
-        routes = newList;
-    }
-}*/
-
 void ListRoute::addRoute(const Route *route)
 {
     if (this->cardMax <= this->currentCard)
@@ -43,7 +21,7 @@ void ListRoute::addRoute(const Route *route)
             newList[i] = routes[i];
         }
 
-        delete [] routes;
+        delete[] routes;
         routes = newList;
     }
 
@@ -55,10 +33,10 @@ void ListRoute::addRoute(const Route *route)
 
 ListRoute *ListRoute::getDepartureFrom(const char *city)
 {
-    ListRoute* departure = new ListRoute();
-    for (unsigned int i = 0; i < cardMax; i++)
+    ListRoute *departure = new ListRoute();
+    for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (routes[i]->getDeparture() == city)
+        if (strcasecmp(routes[i]->getDeparture(), city) == 0)
         {
             departure->addRoute(routes[i]);
         }
@@ -70,10 +48,10 @@ ListRoute *ListRoute::getDepartureFrom(const char *city)
 
 ListRoute *ListRoute::getArrivalTo(const char *city)
 {
-    ListRoute* arrival = new ListRoute();
-    for (unsigned int i = 0; i < cardMax; i++)
+    ListRoute *arrival = new ListRoute();
+    for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (routes[i]->getArrival() == city)
+        if (strcasecmp(routes[i]->getArrival(), city) == 0)
         {
             arrival->addRoute(routes[i]);
         }
@@ -94,11 +72,12 @@ Route *ListRoute::getElement(size_t i) const
     return routes[i];
 }
 
-ListRoute::ListRoute(size_t sizeInit)
+ListRoute::ListRoute(size_t sizeInit, bool deleteRoutesOnDestruct)
 {
     this->cardMax = sizeInit;
     this->currentCard = 0;
     this->routes = new Route *[cardMax];
+    this->deleteRoutesOnDestruct = deleteRoutesOnDestruct;
 
 #ifdef MAP
     cout << "Appel au constructeur de <ListRoute>" << endl;
@@ -108,9 +87,15 @@ ListRoute::ListRoute(size_t sizeInit)
 
 ListRoute::~ListRoute()
 {
-    delete []routes;
-    delete cardMax;
-    delete currentCard;
+    if (deleteRoutesOnDestruct)
+    {
+        for (unsigned int i = 0; i < currentCard; ++i)
+        {
+            delete routes[i];
+        }
+    }
+
+    delete[]routes;
 
 #ifdef MAP
     cout << "Appel au destructeur de <ListRoute>" << endl;

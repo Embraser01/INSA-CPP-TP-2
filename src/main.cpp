@@ -59,6 +59,9 @@ char *trim(char *str)
 
     size_t newSize = last - first;
 
+    // On refuse les chaines vides
+    if (!first_found || !last_found) return NULL;
+
     char *newStr = new char[newSize + 1];
     newStr[newSize] = '\0';
 
@@ -90,13 +93,18 @@ SimpleRoute *getSimpleRoute(char *string)
     char *arrival = trim(strtok_r(NULL, ")", &save_ptr));
 
 
+    // S'il manque un élément
     if (transport == NULL
         || departure == NULL
-        || arrival == NULL
-        || !strlen(transport)
-        || !strlen(departure)
-        || !strlen(arrival))
+        || arrival == NULL)
+    {
+        // On supprime les autres chaines si elles existent
+        if (transport != NULL) delete[] transport;
+        if (departure != NULL) delete[] departure;
+        if (arrival != NULL) delete[] arrival;
+
         return NULL;
+    }
 
     SimpleRoute *simpleRoute = new SimpleRoute(departure, arrival, transport);
 
@@ -147,6 +155,7 @@ void addRoute(Catalog *catalog)
         } else
         {
             cerr << "Ce trajet existe déjà !" << endl;
+            delete route;
         };
     } else
     { // Trajet composé
@@ -163,6 +172,7 @@ void addRoute(Catalog *catalog)
             { // Si une des chaines est vide
 
                 cout << "Erreur lors de la saisie !" << endl;
+                if (composedRoute != NULL) delete composedRoute;
                 typeToContinue();
                 return;
             }
@@ -174,6 +184,9 @@ void addRoute(Catalog *catalog)
             { // Sinon erreur lors de l'ajout de la route
                 cerr << "Erreur lors de l'insertion ! Vérifiez que les villes soient correctement rentrées" << endl;
                 typeToContinue();
+
+                delete composedRoute;
+                delete simpleRoute;
                 return;
             }
 
@@ -189,6 +202,7 @@ void addRoute(Catalog *catalog)
         } else
         {
             cerr << "Ce trajet existe déjà !" << endl;
+            delete composedRoute;
         };
     }
 
@@ -254,6 +268,9 @@ void searchRoute(Catalog *catalog, bool advance = false)
     }
 
     cout << "#----------------------------------------------------------------------------------------------" << endl;
+
+    delete[] departure;
+    delete[] arrival;
 
     typeToContinue();
 }

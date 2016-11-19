@@ -46,7 +46,7 @@ public:
 
     //--------------------------------------- Constructeurs - destructeur
 
-    ListRoute(size_t sizeInit = DEFAULT_LIST_SIZE);
+    ListRoute(size_t sizeInit = DEFAULT_LIST_SIZE, bool deleteRoutesOnDestruct = true);
 
     virtual ~ListRoute();
 
@@ -62,6 +62,7 @@ private:
     Route **routes; // Tableau contenant les routes
     size_t cardMax; // Taille du tableau
     unsigned int currentCard; // Nombre d'élements dans le tableau
+    bool deleteRoutesOnDestruct; // Flag pour savoir si on supprime chaque route dans le destructeur
 };
 
 #endif //TP2_C_LISTROUTE_H
