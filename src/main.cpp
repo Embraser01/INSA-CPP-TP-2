@@ -98,7 +98,13 @@ SimpleRoute *getSimpleRoute(char *string)
         || !strlen(arrival))
         return NULL;
 
-    return new SimpleRoute(departure, arrival, transport);
+    SimpleRoute *simpleRoute = new SimpleRoute(departure, arrival, transport);
+
+    delete[] transport;
+    delete[] departure;
+    delete[] arrival;
+
+    return simpleRoute;
 }
 
 void addRoute(Catalog *catalog)
