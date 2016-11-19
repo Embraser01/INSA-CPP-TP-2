@@ -2,7 +2,6 @@ using namespace std;
 
 #include <iostream>
 
-#define MAP
 #define BUFFER_SIZE 1000
 #define MAX_CONSOLE_LINES 20
 
