@@ -55,22 +55,33 @@ void ListRoute::addRoute(const Route *route)
 
 ListRoute *ListRoute::getDepartureFrom(const char *city)
 {
-    ListRoute departure = ListRoute(DEFAULT_LIST_SIZE);
+    ListRoute* departure = new ListRoute();
     for (unsigned int i = 0; i < cardMax; i++)
     {
         if (routes[i]->getDeparture() == city)
         {
-
+            departure->addRoute(routes[i]);
         }
 
     }
 
-    return NULL;
+    return departure;
 }
 
 ListRoute *ListRoute::getArrivalTo(const char *city)
 {
-    return NULL;
+    ListRoute* arrival = new ListRoute();
+    for (unsigned int i = 0; i < cardMax; i++)
+    {
+        if (routes[i]->getArrival() == city)
+        {
+            arrival->addRoute(routes[i]);
+        }
+
+    }
+
+    return arrival;
+
 }
 
 size_t ListRoute::getSize() const
@@ -97,6 +108,10 @@ ListRoute::ListRoute(size_t sizeInit)
 
 ListRoute::~ListRoute()
 {
+    delete []routes;
+    delete cardMax;
+    delete currentCard;
+
 #ifdef MAP
     cout << "Appel au destructeur de <ListRoute>" << endl;
 #endif
