@@ -26,7 +26,7 @@ void clearConsole()
 
 void typeToContinue()
 {
-    cout << "Appuyer sur ENTREE pour continuer..." << endl;
+    cout << "Appuyer sur ENTREE pour continuer...";
     cin.ignore(256, '\n');
 }
 
