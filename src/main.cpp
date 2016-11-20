@@ -6,9 +6,17 @@ using namespace std;
 #define MAX_CONSOLE_LINES 20
 
 
+//----- DEFINE pour l'insertion automatique
+#define MAX_ROUTE_PER_COMPOSED_ROUTE 4
+#define MAX_NAME_LENGTH 40
+
+
 #include "Catalog.h"
 #include "SimpleRoute.h"
 #include "ComposedRoute.h"
+
+//----- INCLUDE uniquement utilisés pour l'insertion automatique
+#include <stdlib.h>
 
 
 char buff[BUFFER_SIZE] = {'\0'};
@@ -114,35 +122,23 @@ SimpleRoute *getSimpleRoute(char *string)
     return simpleRoute;
 }
 
-void addRoute(Catalog *catalog)
+
+void addRouteFromString(Catalog *catalog, const char *str)
 {
-    clearConsole();
-    cout << "#----------------------------------------------------------------------------------------------" << endl
-         << "#\t Ajouter un trajet" << endl
-         << "#\t" << endl
-         << "#\t" << "\tAjoutez un trajet sous la forme suivante :" << endl
-         << "#\t" << "\t  <Vehicule>(<Ville de départ>,<Ville d'arrivée>)" << endl
-         << "#\t" << endl
-         << "#\t" << "\tPour créer un trajet composé, séparez chaque trajet simple par \";\" " << endl
-         << "#\t" << endl
-         << "#\t" << endl
-         << "#\t" << endl
-         << "#\t" << endl
-         << "#----------------------------------------------------------------------------------------------" << endl
-         << "Saisisser le trajet : ";
+    char *data = new char[strlen(str) + 1];
+    strcpy(data, str);
 
-    cin.getline(buff, BUFFER_SIZE);
-
-    if (strpbrk(buff, ";") == NULL)
+    if (strpbrk(data, ";") == NULL)
     { // Si c'est un trajet simple (pas de point virgule dans le buffer)
 
-        SimpleRoute *route = getSimpleRoute(buff);
+        SimpleRoute *route = getSimpleRoute(data);
 
         if (route == NULL)
         { // Si une des chaines est vide
 
             cout << "Erreur lors de la saisie !" << endl;
             typeToContinue();
+            delete[] data;
             return;
         }
 
@@ -162,7 +158,7 @@ void addRoute(Catalog *catalog)
         SimpleRoute *simpleRoute = NULL;
         ComposedRoute *composedRoute = NULL;
 
-        char *partial = strtok_r(buff, ";", &save_ptr);
+        char *partial = strtok_r(data, ";", &save_ptr);
         while (partial != NULL)
         {
             simpleRoute = getSimpleRoute(partial);
@@ -172,6 +168,7 @@ void addRoute(Catalog *catalog)
 
                 cout << "Erreur lors de la saisie !" << endl;
                 if (composedRoute != NULL) delete composedRoute;
+                delete[] data;
                 typeToContinue();
                 return;
             }
@@ -184,6 +181,7 @@ void addRoute(Catalog *catalog)
                 cerr << "Erreur lors de l'insertion ! Vérifiez que les villes soient correctement rentrées" << endl;
                 typeToContinue();
 
+                delete[] data;
                 delete composedRoute;
                 delete simpleRoute;
                 return;
@@ -205,6 +203,29 @@ void addRoute(Catalog *catalog)
         };
     }
 
+    delete[] data;
+}
+
+void addRoute(Catalog *catalog)
+{
+    clearConsole();
+    cout << "#----------------------------------------------------------------------------------------------" << endl
+         << "#\t Ajouter un trajet" << endl
+         << "#\t" << endl
+         << "#\t" << "\tAjoutez un trajet sous la forme suivante :" << endl
+         << "#\t" << "\t  <Vehicule>(<Ville de départ>,<Ville d'arrivée>)" << endl
+         << "#\t" << endl
+         << "#\t" << "\tPour créer un trajet composé, séparez chaque trajet simple par \";\" " << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#----------------------------------------------------------------------------------------------" << endl
+         << "Saisisser le trajet : ";
+
+    cin.getline(buff, BUFFER_SIZE);
+
+    addRouteFromString(catalog, buff);
     typeToContinue();
 }
 
@@ -274,6 +295,82 @@ void searchRoute(Catalog *catalog, bool advance = false)
     typeToContinue();
 }
 
+void insertSample(Catalog *catalog)
+{
+
+    const char CITIES[][MAX_NAME_LENGTH] = {"Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg",
+                                            "Montpellier", "Bordeaux", "Lille", "Rennes", "Reims", "Le Havre",
+                                            "Saint-Étienne", "Toulon", "Grenoble", "Dijon", "Nîmes", "Angers",
+                                            "Villeurbanne", "Le Mans", "Aix-en-Provence", "Clermont-Ferrand", "Brest",
+                                            "Limoges", "Tours", "Amiens", "Perpignan", "Metz", "Besançon",
+                                            "Boulogne-Billancourt", "Orléans", "Mulhouse", "Rouen", "Saint-Denis",
+                                            "Caen", "Argenteuil", "Saint-Paul", "Montreuil"
+    };
+    const char TRANSPORTS[][MAX_NAME_LENGTH] = {"Voiture", "Train", "Car", "Avion"};
+    const int NB_CITIES = (sizeof(CITIES) / sizeof(*CITIES));
+    const int NB_TRANSPORTS = (sizeof(TRANSPORTS) / sizeof(*TRANSPORTS));
+
+
+    clearConsole();
+    cout << "#----------------------------------------------------------------------------------------------" << endl
+         << "#\t Inserer des données aléatoires" << endl
+         << "#\t" << endl
+         << "#\t" << "\tRentrer le nombre de trajet à créer :" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#----------------------------------------------------------------------------------------------" << endl
+         << "Saisisser le nombre de trajet : ";
+
+    cin.getline(buff, BUFFER_SIZE);
+
+    /* initialize random seed: */
+    srand((unsigned int) time(NULL));
+
+    int nbRoute = atoi(buff);
+    int nbRoutePerComposedRoute;
+    int departure_city;
+    int arrival_city;
+    int transport;
+    char str[BUFFER_SIZE] = {'\0'};
+
+    for (int i = 0; i < nbRoute; i++)
+    {
+        nbRoutePerComposedRoute = rand() % MAX_ROUTE_PER_COMPOSED_ROUTE + 1;
+
+        arrival_city = -1;
+
+        for (int j = 0; j < nbRoutePerComposedRoute; ++j)
+        {
+
+            transport = rand() % NB_TRANSPORTS;
+            // Si trajet composé
+            departure_city = (arrival_city != -1) ? arrival_city : rand() % NB_CITIES;
+            arrival_city = rand() % NB_CITIES;
+
+            // Si le départ est l'arrivée, on ajoute 1 à l'arrivée
+            if (departure_city == arrival_city) arrival_city++;
+
+            strcat(str, TRANSPORTS[transport]);
+            strcat(str, "(");
+            strcat(str, CITIES[departure_city]);
+            strcat(str, ", ");
+            strcat(str, CITIES[arrival_city]);
+            strcat(str, ");");
+        }
+
+        addRouteFromString(catalog, str);
+
+        strcpy(str, "");
+    }
+
+    typeToContinue();
+}
+
 void about()
 {
     clearConsole();
@@ -297,11 +394,12 @@ void about()
 
 int main()
 {
+    bool stop = false;
     Catalog *catalog = new Catalog();
 
 
-    for (;;)
-    { // Tant que l'utilisateur ne veut pas quitter (à travers un break;)
+    for (; !stop;)
+    { // Tant que l'utilisateur ne veut pas quitter
         clearConsole();
         cout << "#----------------------------------------------------------------------------------------------"
              << endl
@@ -311,6 +409,7 @@ int main()
              << "#\t" << "\t2. Consulter le catalogue" << endl
              << "#\t" << "\t3. Rechercher un parcours (simple)" << endl
              << "#\t" << "\t4. Rechercher un parcours (avancée)" << endl
+             << "#\t" << "\t5. Inserer des données aléatoires" << endl
              << "#\t" << endl
              << "#\t" << endl
              << "#\t" << "\ta. A propos" << endl
@@ -322,11 +421,6 @@ int main()
 
         // Si plus d'1 caractère on recommence
         if (strlen(buff) > 1) continue;
-
-        if (buff[0] == 'q')
-        { // S'il veut quitter, on quitte imediatement
-            break;
-        }
 
         switch (buff[0])
         {
@@ -342,8 +436,14 @@ int main()
             case '4':
                 searchRoute(catalog, true);
                 break;
+            case '5':
+                insertSample(catalog);
+                break;
             case 'a':
                 about();
+                break;
+            case 'q':
+                stop = true;
                 break;
             default:
                 break;
