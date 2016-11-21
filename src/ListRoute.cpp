@@ -72,6 +72,35 @@ Route *ListRoute::getElement(size_t i) const
     return routes[i];
 }
 
+
+bool ListRoute :: deleteRoute (Route *route){
+    for (int i =0; i<getSize(); i++){
+        if (routes[i]==route){
+            if(deleteRoutesOnDestruct) delete route[i];
+            currentCard--;
+            for (;i<getSize();i++){
+                routes[i]=routes[i+1];
+            }
+            routes[getSize()]=NULL;
+            return true;
+
+        }
+    }
+    return false;
+
+}
+
+bool ListRoute ::has(Route *route)
+{
+    for (int i =0; i<getSize(); i++){
+        if (routes[i]==route){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 ListRoute::ListRoute(size_t sizeInit, bool deleteRoutesOnDestruct)
 {
     this->cardMax = sizeInit;
