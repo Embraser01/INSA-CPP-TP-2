@@ -33,7 +33,7 @@ void ListRoute::addRoute(const Route *route)
 
 ListRoute *ListRoute::getDepartureFrom(const char *city)
 {
-    ListRoute *departure = new ListRoute();
+    ListRoute *departure = new ListRoute(DEFAULT_LIST_SIZE, false);
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (strcasecmp(routes[i]->getDeparture(), city) == 0)
@@ -48,7 +48,7 @@ ListRoute *ListRoute::getDepartureFrom(const char *city)
 
 ListRoute *ListRoute::getArrivalTo(const char *city)
 {
-    ListRoute *arrival = new ListRoute();
+    ListRoute *arrival = new ListRoute(DEFAULT_LIST_SIZE, false);
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (strcasecmp(routes[i]->getArrival(), city) == 0)

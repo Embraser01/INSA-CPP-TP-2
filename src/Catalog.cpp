@@ -82,7 +82,6 @@ void Catalog::findPath(const char *currentNode)
 {
     Route *tmp;
     ListRoute *tmpList;
-//    cout << "DEBUG " << "Noeud testé : " << currentNode << endl;
 
     if (strcmp(currentNode, targetNode) == 0)
     {
@@ -99,8 +98,7 @@ void Catalog::findPath(const char *currentNode)
         {
             tmp = routes->getElement(i);
 
-            if (strcasecmp(tmp->getDeparture(), currentNode) == 0
-                && strcasecmp(tmp->getArrival(), targetNode) == 0)
+            if (strcasecmp(tmp->getArrival(), currentNode) == 0)
             { // Si les villes de départ et d'arrivée correspondent à la recherche
 
                 visited->addRoute(tmp);
@@ -110,6 +108,7 @@ void Catalog::findPath(const char *currentNode)
         path->push(currentNode);
 
         tmpList = routes->getDepartureFrom(currentNode);
+        // FIXME Memory leakssssss
 
         for (unsigned int i = 0; i < tmpList->getSize(); ++i)
         {
@@ -128,8 +127,7 @@ void Catalog::findPath(const char *currentNode)
         {
             tmp = routes->getElement(i);
 
-            if (strcasecmp(tmp->getDeparture(), currentNode) == 0
-                && strcasecmp(tmp->getArrival(), targetNode) == 0)
+            if (strcasecmp(tmp->getArrival(), currentNode) == 0)
             { // Si les villes de départ et d'arrivée correspondent à la recherche
 
                 visited->deleteRoute(tmp);
