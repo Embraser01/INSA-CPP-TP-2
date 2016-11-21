@@ -6,8 +6,8 @@
 
 void Stack::push(const char * city)
 {
-    link * newTop;
-    newTop = new link;
+    Link * newTop;
+    newTop = new Link;
     newTop.cityName = new char[strlen(city) +1];
     strcpy(newTop.cityName,city);
     newTop.next = this->top;
@@ -19,7 +19,7 @@ char * Stack::pop()
     if(top != NULL)
     {
         delete[] topData;
-        link * newTop;
+        Link * newTop;
         newTop = top.next;
         topData = new char[strlen(top.cityName)+1];
         strcpy(topData,top.cityName);

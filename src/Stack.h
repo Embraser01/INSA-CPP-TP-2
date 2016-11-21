@@ -11,11 +11,11 @@
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
-typedef struct link
+typedef struct Link
 {
     char * cityName;
-    link * next;
-};
+    Link * next;
+} Link;
 
 class Stack {
 
