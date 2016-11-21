@@ -13,7 +13,7 @@ void Catalog::display()
 
 void Catalog::display(ListRoute *listRoute, const char *departureCity, const char *arrivalCity)
 {
-    if (departureCity != NULL)
+    if (departureCity != NULL && arrivalCity != NULL)
     { // Si c'est une recherche
 
         cout << "#\tTrajets existant entre " << departureCity << " et " << arrivalCity << " :" << endl;

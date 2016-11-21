@@ -5,12 +5,6 @@ using namespace std;
 #define BUFFER_SIZE 1000
 #define MAX_CONSOLE_LINES 20
 
-
-//----- DEFINE pour l'insertion automatique
-#define MAX_ROUTE_PER_COMPOSED_ROUTE 4
-#define MAX_NAME_LENGTH 40
-
-
 #include "Catalog.h"
 #include "SimpleRoute.h"
 #include "ComposedRoute.h"
