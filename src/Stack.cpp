@@ -6,38 +6,50 @@
 
 void Stack::push(const char * city)
 {
-    Link * newTop;
-    newTop = new Link;
-    newTop->cityName = new char[strlen(city) +1];
-    strcpy(newTop->cityName,city);
-    newTop->next = this->top;
-    this->top = newTop;
+    if(top>=maxHeight)
+    {
+        maxHeight+=DELTA_STACK_SIZE;
+        char **newStack = new char *[maxHeight];
+
+        // On recopie le contenu de l'ancien tableau
+        for (unsigned int i = 0; i < maxHeight; i++)
+        {
+            newStack[i] = cities[i];
+        }
+
+        delete[] cities;
+        cities = newStack;
+    }
+    char * newCity = new char[strlen(city) +1];
+    strcpy(newCity,city);
+    cities[top++] = newCity;
+    delete topCity;
+    topCity = new char[strlen(city) +1];
+    strcpy(topCity,city);
 }
 
 char * Stack::pop()
 {
-    if(top != NULL)
+    if(top > 0)
     {
-        delete[] topData;
-        Link * newTop;
-        newTop = top->next;
-        topData = new char[strlen(top->cityName)+1];
-        strcpy(topData,top->cityName);
-        delete [] top->cityName;
-        delete top;
-        top = newTop;
-        return topData;
-    }else
+        delete [] topCity;
+        topCity = new char[strlen(cities[top-1])+1];
+        strcpy(topCity,cities[top-1]);
+        delete[] cities[--top];
+        return topCity;
+    } else
     {
+        //pile deja vide
         return NULL;
     }
 }
 
-
 Stack::Stack()
 {
-    topData = NULL;
-    top = NULL;
+    cities = new char*[DEFAULT_STACK_SIZE];
+    top = 0;
+    topCity = NULL;
+    maxHeight = DEFAULT_STACK_SIZE;
 #ifdef MAP
     cout << "Appel au constructeur de <Stack>" << endl;
 #endif
@@ -46,12 +58,11 @@ Stack::Stack()
 
 Stack::~Stack()
 {
-    delete[] topData;
     while(pop()!=NULL)
     {//bloc vide
     }
+    delete[] topCity;
 #ifdef MAP
     cout << "Appel au destructeur de <Stack>" << endl;
 #endif
 }
-

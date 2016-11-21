@@ -14,12 +14,12 @@
 #include <iostream>
 #include <cstring>
 
+#define DEFAULT_STACK_SIZE 10
 
-typedef struct Link
-{
-    char *cityName;
-    Link *next;
-} Link;
+
+#define DELTA_STACK_SIZE 5
+//TODO utiliser tableau dynamique au lieu de la liste
+
 
 class Stack
 {
@@ -46,8 +46,10 @@ private:
 
 protected:
 private:
-    Link* top;
-    char *topData;
+    char ** cities;
+    int top;//the first empty cell of the table
+    size_t maxHeight;
+    char * topCity;
 };
 
 
