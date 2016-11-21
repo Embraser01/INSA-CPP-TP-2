@@ -39,9 +39,6 @@ public:
 
     //--------------------------------------- Redéfinition d'opérateurs
 
-    bool operator==(const Route &other) const;
-    bool operator!=(const Route &other) const;
-
     //--------------------------------------- Constructeurs - destructeur
 
     ComposedRoute(const SimpleRoute* route);

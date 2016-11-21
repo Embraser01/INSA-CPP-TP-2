@@ -74,13 +74,14 @@ void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 
 bool Catalog::addRoute(const Route *route)
 {
+    /* Dans le cas où on verifie si la route existe
     for (unsigned int i = 0; i < routes->getSize(); ++i)
     {
         if (*route == *routes->getElement(i))
         { // Vérifie que la route n'existe pas déjà
             return false;
         }
-    }
+    }*/
 
     routes->addRoute(route);
     return true;

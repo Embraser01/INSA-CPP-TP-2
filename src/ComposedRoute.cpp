@@ -53,32 +53,6 @@ bool ComposedRoute::addSimpleRoute(const SimpleRoute *simpleRoute)
     return false;
 }
 
-bool ComposedRoute::operator==(const Route &other) const
-{
-    const ComposedRoute *other_ptr = dynamic_cast<const ComposedRoute *>(&other);
-
-    // Pas du même type donc forcement different
-    if (other_ptr == NULL) return false;
-
-
-    // TODO Rajouter une surcharge d'operateur sur ListeRoute
-    // Pas de le même nombre de sous routes
-    if (routes->getSize() != other_ptr->routes->getSize()) return false;
-
-    for (unsigned int i = 0; i < routes->getSize(); ++i)
-    {
-        // On compare grace à la surcharge de != sur SimpleRoute les deux éléments
-        if ((*routes->getElement(i)) != (*other_ptr->routes->getElement(i)))
-            return false;
-    }
-    return true;
-}
-
-bool ComposedRoute::operator!=(const Route &other) const
-{
-    return !(*this == other);
-}
-
 
 ComposedRoute::ComposedRoute(const SimpleRoute *route)
 {
