@@ -73,15 +73,20 @@ Route *ListRoute::getElement(size_t i) const
 }
 
 
-bool ListRoute :: deleteRoute (Route *route){
-    for (int i =0; i<getSize(); i++){
-        if (routes[i]==route){
-            if(deleteRoutesOnDestruct) delete route[i];
+bool ListRoute::deleteRoute(Route *route)
+{
+    for (unsigned int i = 0; i < getSize(); i++)
+    {
+        if (routes[i] == route)
+        {
+            if (deleteRoutesOnDestruct) delete route;
+
             currentCard--;
-            for (;i<getSize();i++){
-                routes[i]=routes[i+1];
+            for (; i < getSize(); i++)
+            {
+                routes[i] = routes[i + 1];
             }
-            routes[getSize()]=NULL;
+            routes[getSize()] = NULL;
             return true;
 
         }
@@ -90,10 +95,12 @@ bool ListRoute :: deleteRoute (Route *route){
 
 }
 
-bool ListRoute ::has(Route *route)
+bool ListRoute::has(Route *route)
 {
-    for (int i =0; i<getSize(); i++){
-        if (routes[i]==route){
+    for (unsigned int i = 0; i < getSize(); i++)
+    {
+        if (routes[i] == route)
+        {
             return true;
         }
     }

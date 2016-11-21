@@ -67,8 +67,71 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
 void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 {
     // TODO Advance query
+    path = new Stack();
+    visited = new ListRoute(DEFAULT_LIST_SIZE, false);
+    targetNode = new char[strlen(arrivalCity) + 1];
+    strcpy(targetNode, arrivalCity);
 
-    query(departureCity, arrivalCity);
+    findPath(departureCity);
+
+    delete visited;
+    delete path;
+}
+
+void Catalog::findPath(const char *currentNode)
+{
+    Route *tmp;
+    ListRoute *tmpList;
+
+    if (strcmp(currentNode, targetNode) == 0)
+    {
+        cout << "DEBUG ";
+        for (char *node = path->pop(); node != NULL; node = path->pop())
+        {
+            cout << node << ", ";
+        }
+        cout << endl;
+
+    } else
+    {
+        for (unsigned int i = 0; i < routes->getSize(); ++i)
+        {
+            tmp = routes->getElement(i);
+
+            if (strcasecmp(tmp->getDeparture(), currentNode) == 0
+                && strcasecmp(tmp->getArrival(), targetNode) == 0)
+            { // Si les villes de départ et d'arrivée correspondent à la recherche
+
+                visited->addRoute(tmp);
+            }
+        }
+
+        path->push(currentNode);
+
+        tmpList = routes->getDepartureFrom(currentNode);
+
+        for (unsigned int i = 0; i < tmpList->getSize(); ++i)
+        {
+            tmp = tmpList->getElement(i);
+            if (!visited->has(tmp))
+            {
+                findPath(tmp->getArrival());
+            }
+        }
+
+        for (unsigned int i = 0; i < routes->getSize(); ++i)
+        {
+            tmp = routes->getElement(i);
+
+            if (strcasecmp(tmp->getDeparture(), currentNode) == 0
+                && strcasecmp(tmp->getArrival(), targetNode) == 0)
+            { // Si les villes de départ et d'arrivée correspondent à la recherche
+
+                visited->deleteRoute(tmp);
+            }
+        }
+        path->pop();
+    }
 }
 
 

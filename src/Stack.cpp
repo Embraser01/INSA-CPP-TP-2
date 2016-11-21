@@ -8,10 +8,10 @@ void Stack::push(const char * city)
 {
     Link * newTop;
     newTop = new Link;
-    newTop.cityName = new char[strlen(city) +1];
-    strcpy(newTop.cityName,city);
-    newTop.next = this->top;
-    this.top = newTop;
+    newTop->cityName = new char[strlen(city) +1];
+    strcpy(newTop->cityName,city);
+    newTop->next = this->top;
+    this->top = newTop;
 }
 
 char * Stack::pop()
@@ -20,10 +20,10 @@ char * Stack::pop()
     {
         delete[] topData;
         Link * newTop;
-        newTop = top.next;
-        topData = new char[strlen(top.cityName)+1];
-        strcpy(topData,top.cityName);
-        delete [] top.cityName;
+        newTop = top->next;
+        topData = new char[strlen(top->cityName)+1];
+        strcpy(topData,top->cityName);
+        delete [] top->cityName;
         delete top;
         top = newTop;
         return topData;

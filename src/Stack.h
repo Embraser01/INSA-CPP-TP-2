@@ -11,13 +11,18 @@
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
+#include <iostream>
+#include <cstring>
+
+
 typedef struct Link
 {
-    char * cityName;
-    Link * next;
+    char *cityName;
+    Link *next;
 } Link;
 
-class Stack {
+class Stack
+{
 
 //--------------------------------------- Méthodes publiques
 
@@ -25,9 +30,9 @@ public:
 
     Stack();
 
-    void push(const char * city);
+    void push(const char *city);
 
-    char * pop();
+    char *pop();
 
     virtual ~Stack();
 
@@ -41,8 +46,8 @@ private:
 
 protected:
 private:
-    link top;
-    char * topData;
+    Link* top;
+    char *topData;
 };
 
 

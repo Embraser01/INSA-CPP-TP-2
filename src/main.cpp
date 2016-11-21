@@ -8,7 +8,7 @@ using namespace std;
 
 //----- DEFINE pour l'insertion automatique
 #define MAX_ROUTE_PER_COMPOSED_ROUTE 4
-#define MAX_NAME_LENGTH 40
+#define MAX_NAME_LENGTH 30
 
 
 #include "Catalog.h"
