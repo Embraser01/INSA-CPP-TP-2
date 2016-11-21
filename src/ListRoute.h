@@ -40,6 +40,10 @@ public:
 
     Route *getElement(size_t i) const;
 
+    bool deleteRoute (Route *route);
+
+    bool has(Route* route);
+
 
     //--------------------------------------- Redéfinition d'opérateurs
 
