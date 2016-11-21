@@ -82,6 +82,7 @@ void Catalog::findPath(const char *currentNode)
 {
     Route *tmp;
     ListRoute *tmpList;
+//    cout << "DEBUG " << "Noeud testé : " << currentNode << endl;
 
     if (strcmp(currentNode, targetNode) == 0)
     {
@@ -113,6 +114,10 @@ void Catalog::findPath(const char *currentNode)
         for (unsigned int i = 0; i < tmpList->getSize(); ++i)
         {
             tmp = tmpList->getElement(i);
+            cout << "DEBUG 2 : ";
+            tmp->display();
+            cout << endl;
+
             if (!visited->has(tmp))
             {
                 findPath(tmp->getArrival());

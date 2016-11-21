@@ -36,6 +36,7 @@ char * Stack::pop()
 
 Stack::Stack()
 {
+    topData = NULL;
     top = NULL;
 #ifdef MAP
     cout << "Appel au constructeur de <Stack>" << endl;
