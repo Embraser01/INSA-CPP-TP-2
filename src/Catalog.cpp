@@ -83,9 +83,10 @@ void Catalog::findPath(const char *currentNode)
     Route *tmp;
     ListRoute *tmpList;
 
-    if (strcmp(currentNode, targetNode) == 0)
+    if (strcasecmp(currentNode, targetNode) == 0)
     {
         cout << "DEBUG ";
+        // TODO Ne pas pop() mais lire, puis pop() ceux qui ne sont plus utiles
         for (char *node = path->pop(); node != NULL; node = path->pop())
         {
             cout << node << ", ";
