@@ -42,6 +42,7 @@ private:
 protected:
 private:
     link top;
+    char * topData;
 };
 
 

@@ -18,14 +18,15 @@ char * Stack::pop()
 {
     if(top != NULL)
     {
+        delete[] topData;
         link * newTop;
-        char * city;
         newTop = top.next;
-        city = new char[strlen(top.cityName)+1];
-        strcpy(city,top.cityName);
+        topData = new char[strlen(top.cityName)+1];
+        strcpy(topData,top.cityName);
         delete [] top.cityName;
         delete top;
-        return city;
+        top = newTop;
+        return topData;
     }else
     {
         return NULL;
@@ -44,6 +45,7 @@ Stack::Stack()
 
 Stack::~Stack()
 {
+    delete[] topData;
     while(pop()!=NULL)
     {//bloc vide
     }
