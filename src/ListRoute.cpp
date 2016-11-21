@@ -36,7 +36,7 @@ ListRoute *ListRoute::getDepartureFrom(const char *city)
     ListRoute *departure = new ListRoute();
     for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (strcasecmp(routes[i]->getDeparture(), city) == 0)
+        if (strcmp(routes[i]->getDeparture(), city) == 0)
         {
             departure->addRoute(routes[i]);
         }
@@ -51,7 +51,7 @@ ListRoute *ListRoute::getArrivalTo(const char *city)
     ListRoute *arrival = new ListRoute();
     for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (strcasecmp(routes[i]->getArrival(), city) == 0)
+        if (strcmp(routes[i]->getArrival(), city) == 0)
         {
             arrival->addRoute(routes[i]);
         }

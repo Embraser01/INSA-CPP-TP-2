@@ -44,7 +44,7 @@ bool ComposedRoute::addSimpleRoute(const SimpleRoute *simpleRoute)
 {
     // On verifie que la derniere ville d'arrivée est celle de départ !
 
-    if (strcasecmp(routes->getElement(routes->getSize() - 1)->getArrival(), simpleRoute->getDeparture()) == 0)
+    if (strcmp(routes->getElement(routes->getSize() - 1)->getArrival(), simpleRoute->getDeparture()) == 0)
     {
         routes->addRoute(simpleRoute);
         return true;

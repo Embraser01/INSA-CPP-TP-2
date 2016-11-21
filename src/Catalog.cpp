@@ -50,8 +50,8 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
     {
         tmp = routes->getElement(i);
 
-        if (strcasecmp(tmp->getDeparture(), departureCity) == 0
-            && strcasecmp(tmp->getArrival(), arrivalCity) == 0)
+        if (strcmp(tmp->getDeparture(), departureCity) == 0
+            && strcmp(tmp->getArrival(), arrivalCity) == 0)
         { // Si les villes de départ et d'arrivée correspondent à la recherche
 
             searchResults->addRoute(tmp);
