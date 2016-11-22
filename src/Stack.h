@@ -34,6 +34,12 @@ public:
 
     char *pop();
 
+    char * readI(unsigned int i);
+    //Mode d'emploi : accede a la valeur pointe par le ieme element de la pile, compte a partir du dernier
+    //Contrat: i< top
+
+    unsigned int getTop();
+
     virtual ~Stack();
 
 
@@ -47,9 +53,9 @@ private:
 protected:
 private:
     char ** cities;
-    int top;//the first empty cell of the table
+    unsigned int top;//the first empty cell of the table
     size_t maxHeight;
-    char * topCity;
+    char * output;
 };
 
 
