@@ -41,7 +41,7 @@ char *Stack::pop() {
 
 char *Stack::readI(unsigned int i) {
     delete[] output;
-    output = new char[strlen[top - (i + 1)]];
+    output = new char[strlen(cities[top - (i + 1)])];
     strcpy(output, cities[top - (i + 1)]);
     return output;
 }
