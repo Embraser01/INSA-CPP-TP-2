@@ -45,7 +45,7 @@ char *Stack::pop()
 
         if (top == 0)
         { // Si la liste est vide, on supprime le tableau
-
+            maxHeight = 0;
             delete[] cities;
         }
         return topCity;
