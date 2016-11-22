@@ -392,118 +392,65 @@ void about()
     typeToContinue();
 }
 
-//int main()
-//{
-//    bool stop = false;
-//    Catalog *catalog = new Catalog();
-//
-//
-//    for (; !stop;)
-//    { // Tant que l'utilisateur ne veut pas quitter
-//        clearConsole();
-//        cout << "#----------------------------------------------------------------------------------------------"
-//             << endl
-//             << "#\t Ultra promo voyage" << endl
-//             << "#\t" << endl
-//             << "#\t" << "\t1. Ajouter un trajet au catalogue" << endl
-//             << "#\t" << "\t2. Consulter le catalogue" << endl
-//             << "#\t" << "\t3. Rechercher un parcours (simple)" << endl
-//             << "#\t" << "\t4. Rechercher un parcours (avancée)" << endl
-//             << "#\t" << "\t5. Inserer des données aléatoires" << endl
-//             << "#\t" << endl
-//             << "#\t" << endl
-//             << "#\t" << "\ta. A propos" << endl
-//             << "#\t" << "\tq. Quitter l'application" << endl
-//             << "#----------------------------------------------------------------------------------------------"
-//             << endl
-//             << "Saisisser l'option voulue : ";
-//        cin.getline(buff, BUFFER_SIZE);
-//
-//        // Si plus d'1 caractère on recommence
-//        if (strlen(buff) > 1) continue;
-//
-//        switch (buff[0])
-//        {
-//            case '1':
-//                addRoute(catalog);
-//                break;
-//            case '2':
-//                displayCatalog(catalog);
-//                break;
-//            case '3':
-//                searchRoute(catalog);
-//                break;
-//            case '4':
-//                searchRoute(catalog, true);
-//                break;
-//            case '5':
-//                insertSample(catalog);
-//                break;
-//            case 'a':
-//                about();
-//                break;
-//            case 'q':
-//                stop = true;
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-//
-//
-//    delete catalog;
-//    return 0;
-//}
-
-//fixme segmentation fault in line 472
 int main()
 {
-    //test cout
-    char * a;
-    a= NULL;
-    cout<<"afficher a"<<endl;
-    cout<<&a<<endl;
+    bool stop = false;
+    Catalog *catalog = new Catalog();
 
-    // premier test pile
-    cout<<"premier test creer et supprimer une pile"<<endl;
-    cout<<"Declarer pile"<<endl;
-    Stack * maPile;
-    cout<<"Initialiser pile"<<endl;
-    maPile = new Stack();
-    cout<<"Supr pile"<<endl;
-    delete maPile;
 
-    //test augmentation
-    Stack * augmenter;
-    augmenter = new Stack();
-    augmenter->push("Lyon");
-    augmenter->push("Reims");
-    augmenter->push("Paris");
-    augmenter->push("Metz");
-    augmenter->push("Marseille");
-    augmenter->push("Villeurbanne");
-    augmenter->push("Brest");
-    augmenter->push("Vesoul");
-    augmenter->push("Nice");
-    augmenter->push("Toulouse");
-    augmenter->push("Tours");
-    augmenter->pop();
-    augmenter->pop();
-    augmenter->pop();
-    augmenter->pop();
-    augmenter->pop();
-    augmenter->pop();
-    augmenter->pop();
-    augmenter->pop();
-    delete augmenter;
+    for (; !stop;)
+    { // Tant que l'utilisateur ne veut pas quitter
+        clearConsole();
+        cout << "#----------------------------------------------------------------------------------------------"
+             << endl
+             << "#\t Ultra promo voyage" << endl
+             << "#\t" << endl
+             << "#\t" << "\t1. Ajouter un trajet au catalogue" << endl
+             << "#\t" << "\t2. Consulter le catalogue" << endl
+             << "#\t" << "\t3. Rechercher un parcours (simple)" << endl
+             << "#\t" << "\t4. Rechercher un parcours (avancée)" << endl
+             << "#\t" << "\t5. Inserer des données aléatoires" << endl
+             << "#\t" << endl
+             << "#\t" << endl
+             << "#\t" << "\ta. A propos" << endl
+             << "#\t" << "\tq. Quitter l'application" << endl
+             << "#----------------------------------------------------------------------------------------------"
+             << endl
+             << "Saisisser l'option voulue : ";
+        cin.getline(buff, BUFFER_SIZE);
 
-    //test avec segfault
-    Stack * autrePile;
-    autrePile = new Stack();
-    autrePile->push("Lyon");
-    autrePile->push("Reims");
-    cout<<autrePile->pop()<<endl;
-    cout<<autrePile->pop()<<endl;
-    //cout<<autrePile->pop()<<endl;
-    delete autrePile;
+        // Si plus d'1 caractère on recommence
+        if (strlen(buff) > 1) continue;
+
+        switch (buff[0])
+        {
+            case '1':
+                addRoute(catalog);
+                break;
+            case '2':
+                displayCatalog(catalog);
+                break;
+            case '3':
+                searchRoute(catalog);
+                break;
+            case '4':
+                searchRoute(catalog, true);
+                break;
+            case '5':
+                insertSample(catalog);
+                break;
+            case 'a':
+                about();
+                break;
+            case 'q':
+                stop = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    delete catalog;
+    return 0;
 }
