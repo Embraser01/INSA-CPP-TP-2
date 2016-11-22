@@ -14,9 +14,6 @@
 #include <iostream>
 #include <cstring>
 
-#define DEFAULT_STACK_SIZE 10
-
-
 #define DELTA_STACK_SIZE 5
 //TODO utiliser tableau dynamique au lieu de la liste
 
@@ -34,11 +31,11 @@ public:
 
     char *pop();
 
-    char * readI(unsigned int i);
+    const char * readI(unsigned int i);
     //Mode d'emploi : accede a la valeur pointe par le ieme element de la pile, compte a partir du dernier
-    //Contrat: i< top
+    //Contrat: i < top
 
-    unsigned int getTop();
+    unsigned int getSize();
 
     virtual ~Stack();
 
@@ -55,7 +52,7 @@ private:
     char ** cities;
     unsigned int top;//the first empty cell of the table
     size_t maxHeight;
-    char * output;
+    char * topCity;
 };
 
 

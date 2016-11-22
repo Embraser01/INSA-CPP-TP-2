@@ -4,68 +4,90 @@
 
 #include "Stack.h"
 
-void Stack::push(const char *city) {
-    if (top >= maxHeight) {
+void Stack::push(const char *city)
+{
+    if (top >= maxHeight)
+    {
         maxHeight += DELTA_STACK_SIZE;
         char **newStack = new char *[maxHeight];
 
         // On recopie le contenu de l'ancien tableau
-        for (unsigned int i = 0; i < maxHeight; i++) {
-            newStack[i] = cities[i];//en effet on ne recopie que les pointeurs
+        for (unsigned int i = 0; i < top; i++)
+        {
+            newStack[i] = cities[i];
         }
 
         delete[] cities;
         cities = newStack;
     }
+
     char *newCity = new char[strlen(city) + 1];
     strcpy(newCity, city);
+
     cities[top++] = newCity;
-    delete output;
-    output = new char[strlen(city) + 1];
-    strcpy(output, city);
 }
 
-char *Stack::pop() {
-    if (top > 0) {
-        delete[] output;//delete null != free null
-        output = new char[strlen(cities[top - 1]) +
-                          1];//top est la premiere case vide, top -1 est la derniere case ajoute
-        strcpy(output, cities[top - 1]);
-        delete[] cities[--top];
-        return output;
-    } else {
+char *Stack::pop()
+{
+    if (cities != NULL)
+    {
+        delete[] topCity;
+
+        top--;
+
+        topCity = new char[strlen(cities[top]) + 1];
+        strcpy(topCity, cities[top]);
+
+
+        delete[] cities[top];
+        cities[top] = NULL;
+
+
+        if (top == 0)
+        { // Si la liste est vide, on supprime le tableau
+
+            delete[] cities;
+        }
+        return topCity;
+    } else
+    {
         //pile deja vide
-        return NULL;//erreur
+        return NULL;
     }
 }
 
-char *Stack::readI(unsigned int i) {
-    delete[] output;
-    output = new char[strlen(cities[top - (i + 1)])];
-    strcpy(output, cities[top - (i + 1)]);
-    return output;
+const char *Stack::readI(unsigned int i) {
+    if (i < top) {
+        return cities[top - 1 - i];
+    }
+    return NULL;
 }
 
-unsigned int Stack::getTop() {
+unsigned int Stack::getSize() {
     return top;
 }
 
 Stack::Stack() {
-    cities = new char *[DEFAULT_STACK_SIZE];
+    maxHeight = 0;
     top = 0;
-    output = NULL;
-    maxHeight = DEFAULT_STACK_SIZE;
+    topCity = NULL;
+    cities = NULL;
+
 #ifdef MAP
     cout << "Appel au constructeur de <Stack>" << endl;
 #endif
 }
 
 
-Stack::~Stack() {
-    while (pop() != NULL) {//bloc vide
+Stack::~Stack()
+{
+    while (pop() != NULL)
+    {//bloc vide
     }
-    delete[] output;
+    delete[] topCity;
+
 #ifdef MAP
     cout << "Appel au destructeur de <Stack>" << endl;
 #endif
 }
+
