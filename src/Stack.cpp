@@ -30,7 +30,6 @@ void Stack::push(const char * city)
 
 char * Stack::pop()
 {
-    std::cout<<top<<std::endl;
     if(top > 0)
     {
         delete [] topCity;//delete null != free null
