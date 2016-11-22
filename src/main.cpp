@@ -458,17 +458,52 @@ void about()
 //fixme segmentation fault in line 472
 int main()
 {
+    //test cout
+    char * a;
+    a= NULL;
+    cout<<"afficher a"<<endl;
+    cout<<&a<<endl;
+
     // premier test pile
+    cout<<"premier test creer et supprimer une pile"<<endl;
+    cout<<"Declarer pile"<<endl;
     Stack * maPile;
+    cout<<"Initialiser pile"<<endl;
     maPile = new Stack();
+    cout<<"Supr pile"<<endl;
     delete maPile;
 
-    //
+    //test augmentation
+    Stack * augmenter;
+    augmenter = new Stack();
+    augmenter->push("Lyon");
+    augmenter->push("Reims");
+    augmenter->push("Paris");
+    augmenter->push("Metz");
+    augmenter->push("Marseille");
+    augmenter->push("Villeurbanne");
+    augmenter->push("Brest");
+    augmenter->push("Vesoul");
+    augmenter->push("Nice");
+    augmenter->push("Toulouse");
+    augmenter->push("Tours");
+    augmenter->pop();
+    augmenter->pop();
+    augmenter->pop();
+    augmenter->pop();
+    augmenter->pop();
+    augmenter->pop();
+    augmenter->pop();
+    augmenter->pop();
+    delete augmenter;
+
+    //test avec segfault
     Stack * autrePile;
     autrePile = new Stack();
     autrePile->push("Lyon");
     autrePile->push("Reims");
     cout<<autrePile->pop()<<endl;
     cout<<autrePile->pop()<<endl;
+    //cout<<autrePile->pop()<<endl;
     delete autrePile;
 }

@@ -14,7 +14,7 @@ void Stack::push(const char * city)
         // On recopie le contenu de l'ancien tableau
         for (unsigned int i = 0; i < maxHeight; i++)
         {
-            newStack[i] = cities[i];
+            newStack[i] = cities[i];//en effet on ne recopie que les pointeurs
         }
 
         delete[] cities;
@@ -30,17 +30,18 @@ void Stack::push(const char * city)
 
 char * Stack::pop()
 {
+    std::cout<<top<<std::endl;
     if(top > 0)
     {
-        delete [] topCity;
-        topCity = new char[strlen(cities[top-1])+1];
+        delete [] topCity;//delete null != free null
+        topCity = new char[strlen(cities[top-1])+1];//top est la premiere case vide, top -1 est la derniere case ajoute
         strcpy(topCity,cities[top-1]);
         delete[] cities[--top];
         return topCity;
     } else
     {
         //pile deja vide
-        return NULL;
+        return NULL;//erreur
     }
 }
 
