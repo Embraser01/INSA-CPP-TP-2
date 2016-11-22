@@ -34,7 +34,6 @@ public:
     const char * readI(unsigned int i);
     //Mode d'emploi : accede a la valeur pointe par le ieme element de la pile, compte a partir du dernier
     // si on prend 0, on recupere le dernier element ajoute dans la pile
-    //Contrat: i< top
     //Contrat: i < top
 
     unsigned int getSize();
