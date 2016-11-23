@@ -365,7 +365,8 @@ void insertSample(Catalog *catalog)
 
         addRouteFromString(catalog, str);
 
-        strcpy(str, "");
+        // On reset la chaine
+        str[0] = '\0';
     }
 
     typeToContinue();
