@@ -88,7 +88,7 @@ void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 void Catalog::findPath(Route *currentRoute)
 {
     Route *tmp;
-    ListRoute *previousRoute;
+    ListRoute *previousRoutes;
     ListRoute *nextRoutes;
 
     bool isArrived = false;
@@ -116,17 +116,14 @@ void Catalog::findPath(Route *currentRoute)
         currentRoute->display();
         cout << endl
              << "FIN PARCOURS : --------------------------------------------------------" << endl;
-/*
-        // On enlève la dernière route
-        path->deleteRoute(path->getElement(size - 1));*/
 
     } else
     {
-        previousRoute = routes->getArrivalTo(currentRoute->getDeparture());
+        previousRoutes = routes->getArrivalTo(currentRoute->getDeparture());
 
-        for (unsigned int i = 0; i < previousRoute->getSize(); ++i)
+        for (unsigned int i = 0; i < previousRoutes->getSize(); ++i)
         { // On ajoute les routes où on est passé
-            visited->addRoute(previousRoute->getElement(i));
+            visited->addRoute(previousRoutes->getElement(i));
         }
 
         path->addRoute(currentRoute);
@@ -143,15 +140,15 @@ void Catalog::findPath(Route *currentRoute)
             }
         }
 
-        for (unsigned int i = 0; i < previousRoute->getSize(); ++i)
+        for (unsigned int i = 0; i < previousRoutes->getSize(); ++i)
         { // On enleve les routes où on est passé
-            visited->deleteRoute(previousRoute->getElement(i));
+            visited->deleteRoute(previousRoutes->getElement(i));
         }
 
         path->deleteRoute(path->getElement(path->getSize() - 1));
 
         delete nextRoutes;
-        delete previousRoute;
+        delete previousRoutes;
     }
 }
 
