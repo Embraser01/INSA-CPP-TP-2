@@ -23,23 +23,17 @@ class SimpleRoute : public Route
 
 public:
 
-
-    char *getTransport() const
-    {
-        return transport;
-    }
-
-    virtual char *getDeparture() const
+    virtual char *GetDeparture() const
     {
         return departure;
     }
 
-    virtual char *getArrival() const
+    virtual char *GetArrival() const
     {
         return arrival;
     }
 
-    virtual void display();
+    virtual void Display();
     // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard le trajet sous la forme suivante
     //                  Départ de <Ville départ> pour <Ville arrivée> par <Moyen de transport>
 

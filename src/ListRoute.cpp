@@ -6,7 +6,7 @@
 #include "ListRoute.h"
 
 
-void ListRoute::addRoute(const Route *route)
+void ListRoute::AddRoute(const Route *route)
 {
     if (this->cardMax <= this->currentCard)
     { // Si pas assez de place
@@ -31,54 +31,57 @@ void ListRoute::addRoute(const Route *route)
     routes[currentCard++] = (Route *) route;
 }
 
-ListRoute *ListRoute::getDepartureFrom(const char *city)
+ListRoute *ListRoute::GetDepartureFrom(const char *city)
 {
-    ListRoute *departure = new ListRoute(DEFAULT_LIST_SIZE, false);
+    ListRoute *departureRoutes = new ListRoute(DEFAULT_LIST_SIZE, false);
     for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (strcmp(routes[i]->getDeparture(), city) == 0)
+        if (strcmp(routes[i]->GetDeparture(), city) == 0)
         {
-            departure->addRoute(routes[i]);
+            departureRoutes->AddRoute(routes[i]);
         }
     }
 
-    return departure;
+    return departureRoutes;
 }
 
-ListRoute *ListRoute::getArrivalTo(const char *city)
+ListRoute *ListRoute::GetArrivalTo(const char *city)
 {
-    ListRoute *arrival = new ListRoute(DEFAULT_LIST_SIZE, false);
+    ListRoute *arrivalRoutes = new ListRoute(DEFAULT_LIST_SIZE, false);
     for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (strcmp(routes[i]->getArrival(), city) == 0)
+        if (strcmp(routes[i]->GetArrival(), city) == 0)
         {
-            arrival->addRoute(routes[i]);
+            arrivalRoutes->AddRoute(routes[i]);
         }
 
     }
 
-    return arrival;
+    return arrivalRoutes;
 
 }
 
-size_t ListRoute::getSize() const
+size_t ListRoute::GetSize() const
 {
     return currentCard;
 }
 
-Route *ListRoute::getElement(size_t i) const
+Route *ListRoute::GetElement(size_t i) const
 {
     return routes[i];
 }
 
 
-bool ListRoute::deleteRoute(Route *route)
+bool ListRoute::DeleteRoute(Route *route)
 {
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (routes[i] == route)
         {
-            if (deleteRoutesOnDestruct) delete route;
+            if (deleteRoutesOnDestruct)
+            {
+                delete route;
+            }
 
             currentCard--;
             for (; i < currentCard; i++)
@@ -93,9 +96,9 @@ bool ListRoute::deleteRoute(Route *route)
 
 }
 
-bool ListRoute::has(Route *route)
+bool ListRoute::Has(Route *route)
 {
-    for (unsigned int i = 0; i < getSize(); i++)
+    for (unsigned int i = 0; i < GetSize(); i++)
     {
         if (routes[i] == route)
         {

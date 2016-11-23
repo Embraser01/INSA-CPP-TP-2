@@ -51,7 +51,7 @@ SimpleRoute::SimpleRoute(const char *departure,
 #endif
 }
 
-void SimpleRoute::display()
+void SimpleRoute::Display()
 {
     cout << "De " << departure << " vers " << arrival << " en " << transport;
 }

@@ -7,46 +7,46 @@
 
 #include "ComposedRoute.h"
 
-char *ComposedRoute::getDeparture() const
+char *ComposedRoute::GetDeparture() const
 {
-    if (routes != NULL && routes->getSize() > 0)
+    if (routes != NULL && routes->GetSize() > 0)
     {
-        return routes->getElement(0)->getDeparture();
+        return routes->GetElement(0)->GetDeparture();
     }
     return NULL;
 }
 
-char *ComposedRoute::getArrival() const
+char *ComposedRoute::GetArrival() const
 {
-    if (routes != NULL && routes->getSize() > 0)
+    if (routes != NULL && routes->GetSize() > 0)
     {
-        return routes->getElement(routes->getSize() - 1)->getArrival();
+        return routes->GetElement(routes->GetSize() - 1)->GetArrival();
     }
     return NULL;
 }
 
 
-void ComposedRoute::display()
+void ComposedRoute::Display()
 {
     // On affiche l'ensemble des trajets
 
-    for (unsigned int i = 0; i < routes->getSize() - 1; ++i)
+    for (unsigned int i = 0; i < routes->GetSize() - 1; ++i)
     { // Jusqu'à l'avant dernier
-        routes->getElement(i)->display();
+        routes->GetElement(i)->Display();
         cout << " — ";
     }
 
-    routes->getElement(routes->getSize() - 1)->display();
+    routes->GetElement(routes->GetSize() - 1)->Display();
 }
 
 
-bool ComposedRoute::addSimpleRoute(const SimpleRoute *simpleRoute)
+bool ComposedRoute::AddSimpleRoute(const SimpleRoute *simpleRoute)
 {
     // On verifie que la derniere ville d'arrivée est celle de départ !
 
-    if (strcmp(routes->getElement(routes->getSize() - 1)->getArrival(), simpleRoute->getDeparture()) == 0)
+    if (strcmp(routes->GetElement(routes->GetSize() - 1)->GetArrival(), simpleRoute->GetDeparture()) == 0)
     {
-        routes->addRoute(simpleRoute);
+        routes->AddRoute(simpleRoute);
         return true;
     }
 
@@ -57,7 +57,7 @@ bool ComposedRoute::addSimpleRoute(const SimpleRoute *simpleRoute)
 ComposedRoute::ComposedRoute(const SimpleRoute *route)
 {
     routes = new ListRoute();
-    routes->addRoute(route);
+    routes->AddRoute(route);
 
 #ifdef MAP
     cout << "Appel au constructeur de <ComposedRoute>" << endl;

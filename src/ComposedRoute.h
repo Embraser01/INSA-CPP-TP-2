@@ -25,17 +25,17 @@ class ComposedRoute : public Route
 
 public:
 
-    virtual char *getDeparture() const;
+    virtual char *GetDeparture() const;
 
-    virtual char *getArrival() const;
+    virtual char *GetArrival() const;
 
-    virtual void display();
+    virtual void Display();
     // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard le trajet sous la forme suivante
     //                  Départ de <Ville départ> pour <Ville arrivée>,
     //                          le trajet desservira les villes suivantes <Ville n (Transport)>,...
 
 
-    bool addSimpleRoute(const SimpleRoute *simpleRoute);
+    bool AddSimpleRoute(const SimpleRoute *simpleRoute);
 
     //--------------------------------------- Redéfinition d'opérateurs
 

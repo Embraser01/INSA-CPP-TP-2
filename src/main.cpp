@@ -30,26 +30,27 @@ void typeToContinue()
 
 char *trim(char *str)
 {
-    if (str == NULL) return NULL;
+    if (str == NULL)
+    { return NULL; }
 
     size_t size = strlen(str);
     unsigned int first = 0;
     unsigned int last = (unsigned int) size;
 
-    bool first_found = false;
-    bool last_found = false;
+    bool firstFound = false;
+    bool lastFound = false;
 
-    for (unsigned int i = 0; i < size && (!first_found || !last_found); ++i)
+    for (unsigned int i = 0; i < size && (!firstFound || !lastFound); ++i)
     {
-        if (!first_found && str[i] != ' ')
+        if (!firstFound && str[i] != ' ')
         {
-            first_found = true;
+            firstFound = true;
             first = i;
         }
 
-        if (!last_found && str[size - i - 1] != ' ')
+        if (!lastFound && str[size - i - 1] != ' ')
         {
-            last_found = true;
+            lastFound = true;
             last = (unsigned int) size - i;
         }
     }
@@ -57,7 +58,8 @@ char *trim(char *str)
     size_t newSize = last - first;
 
     // On refuse les chaines vides
-    if (!first_found || !last_found) return NULL;
+    if (!firstFound || !lastFound)
+    { return NULL; }
 
     char *newStr = new char[newSize + 1];
     newStr[newSize] = '\0';
@@ -73,21 +75,22 @@ char *trim(char *str)
 
 SimpleRoute *getSimpleRoute(char *string)
 {
-    if (string == NULL) return NULL;
+    if (string == NULL)
+    { return NULL; }
 
-    char *save_ptr;
+    char *savePtr; // Pour retenir la chaine utilisée
 
     // On recupère le moyen de transport (avant le '(')
-    char *transport = trim(strtok_r(string, "(", &save_ptr));
+    char *transport = trim(strtok_r(string, "(", &savePtr));
 
     // On recupère la ville de départ (avant le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *departure = trim(strtok_r(NULL, ",", &save_ptr));
+    char *departure = trim(strtok_r(NULL, ",", &savePtr));
 
 
     // On recupère la ville d'arrivée (avant le ')')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *arrival = trim(strtok_r(NULL, ")", &save_ptr));
+    char *arrival = trim(strtok_r(NULL, ")", &savePtr));
 
 
     // S'il manque un élément
@@ -96,9 +99,12 @@ SimpleRoute *getSimpleRoute(char *string)
         || arrival == NULL)
     {
         // On supprime les autres chaines si elles existent
-        if (transport != NULL) delete[] transport;
-        if (departure != NULL) delete[] departure;
-        if (arrival != NULL) delete[] arrival;
+        if (transport != NULL)
+        { delete[] transport; }
+        if (departure != NULL)
+        { delete[] departure; }
+        if (arrival != NULL)
+        { delete[] arrival; }
 
         return NULL;
     }
@@ -132,10 +138,10 @@ void addRouteFromString(Catalog *catalog, const char *str)
             return;
         }
 
-        if (catalog->addRoute(route))
+        if (catalog->AddRoute(route))
         {
             cout << "Le trajet suivant a bien été ajouté : ";
-            route->display();
+            route->Display();
             cout << endl;
         } else
         {
@@ -144,11 +150,11 @@ void addRouteFromString(Catalog *catalog, const char *str)
         };
     } else
     { // Trajet composé
-        char *save_ptr;
+        char *savePtr;
         SimpleRoute *simpleRoute = NULL;
         ComposedRoute *composedRoute = NULL;
 
-        char *partial = strtok_r(data, ";", &save_ptr);
+        char *partial = strtok_r(data, ";", &savePtr);
         while (partial != NULL)
         {
             simpleRoute = getSimpleRoute(partial);
@@ -157,7 +163,8 @@ void addRouteFromString(Catalog *catalog, const char *str)
             { // Si une des chaines est vide
 
                 cout << "Erreur lors de la saisie !" << endl;
-                if (composedRoute != NULL) delete composedRoute;
+                if (composedRoute != NULL)
+                { delete composedRoute; }
                 delete[] data;
                 typeToContinue();
                 return;
@@ -166,7 +173,7 @@ void addRouteFromString(Catalog *catalog, const char *str)
             if (composedRoute == NULL)
             { // Lors du premier loop, on instancie la route composée
                 composedRoute = new ComposedRoute(simpleRoute);
-            } else if (!composedRoute->addSimpleRoute(simpleRoute))
+            } else if (!composedRoute->AddSimpleRoute(simpleRoute))
             { // Sinon erreur lors de l'ajout de la route
                 cerr << "Erreur lors de l'insertion ! Vérifiez que les villes soient correctement rentrées" << endl;
                 typeToContinue();
@@ -177,14 +184,14 @@ void addRouteFromString(Catalog *catalog, const char *str)
                 return;
             }
 
-            partial = strtok_r(NULL, ";", &save_ptr);
+            partial = strtok_r(NULL, ";", &savePtr);
         }
 
 
-        if (catalog->addRoute(composedRoute))
+        if (catalog->AddRoute(composedRoute))
         {
             cout << "Le trajet suivant a bien été ajouté : ";
-            composedRoute->display();
+            composedRoute->Display();
             cout << endl;
         } else
         {
@@ -227,7 +234,7 @@ void displayCatalog(Catalog *catalog)
          << "#\t Voir le catalogue" << endl
          << "#\t" << endl;
 
-    catalog->display();
+    catalog->Display();
 
     cout << "#----------------------------------------------------------------------------------------------" << endl;
 
@@ -253,16 +260,16 @@ void searchRoute(Catalog *catalog, bool advance = false)
 
     cin.getline(buff, BUFFER_SIZE);
 
-    char *save_ptr;
+    char *savePtr;
 
     // On recupère la ville de départ (avant le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *departure = trim(strtok_r(buff, ",", &save_ptr));
+    char *departure = trim(strtok_r(buff, ",", &savePtr));
 
 
     // On recupère la ville d'arrivée (après le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *arrival = trim(strtok_r(NULL, "", &save_ptr));
+    char *arrival = trim(strtok_r(NULL, "", &savePtr));
 
     clearConsole();
     cout << "#----------------------------------------------------------------------------------------------" << endl
@@ -271,10 +278,10 @@ void searchRoute(Catalog *catalog, bool advance = false)
 
     if (advance)
     {
-        catalog->advanceQuery(departure, arrival);
+        catalog->AdvanceQuery(departure, arrival);
     } else
     {
-        catalog->query(departure, arrival);
+        catalog->Query(departure, arrival);
     }
 
     cout << "#----------------------------------------------------------------------------------------------" << endl;
@@ -333,34 +340,35 @@ int main()
              << "Saisisser l'option voulue : ";
         cin.getline(buff, BUFFER_SIZE);
 
-        // Si plus d'1 caractère on recommence
-        if (strlen(buff) > 1) continue;
 
-        switch (buff[0])
-        {
-            case '1':
-                addRoute(catalog);
-                break;
-            case '2':
-                displayCatalog(catalog);
-                break;
-            case '3':
-                searchRoute(catalog);
-                break;
-            case '4':
-                searchRoute(catalog, true);
-                break;
-            case 'a':
-                about();
-                break;
-            case 'q':
-                stop = true;
-                break;
-            default:
-                break;
+        if (strlen(buff) == 1)
+        { // Si seulement un caractère !
+
+            switch (buff[0])
+            {
+                case '1':
+                    addRoute(catalog);
+                    break;
+                case '2':
+                    displayCatalog(catalog);
+                    break;
+                case '3':
+                    searchRoute(catalog);
+                    break;
+                case '4':
+                    searchRoute(catalog, true);
+                    break;
+                case 'a':
+                    about();
+                    break;
+                case 'q':
+                    stop = true;
+                    break;
+                default:
+                    break;
+            }
         }
     }
-
 
     delete catalog;
     return 0;

@@ -6,7 +6,7 @@
 
 #include "Catalog.h"
 
-void Catalog::display()
+void Catalog::Display()
 {
     display(routes, NULL, NULL);
 }
@@ -22,39 +22,39 @@ void Catalog::display(ListRoute *listRoute, const char *departureCity, const cha
         cout << "#\tTrajets disponibles dans le catalogue" << endl;
     }
 
-    if (listRoute->getSize() == 0)
+    if (listRoute->GetSize() == 0)
     { // Si la liste est vide alors on affiche un message et stop la fonction
         cout << "#\t" << "\tAucun trajet n'a été trouvé" << endl;
     }
 
     // On affiche l'ensemble des trajets
 
-    for (unsigned int i = 0; i < listRoute->getSize(); ++i)
+    for (unsigned int i = 0; i < listRoute->GetSize(); ++i)
     {
         cout << "#\t\t" << i + 1 << ". "; // Tabulation
-        listRoute->getElement(i)->display();
+        listRoute->GetElement(i)->Display();
         cout << endl;
     }
 }
 
 
-void Catalog::query(const char *departureCity, const char *arrivalCity)
+void Catalog::Query(const char *departureCity, const char *arrivalCity)
 {
     // On créé une liste de la même taille du catalogue existant pour optimiser les performances
     // car pas besoin de recopier le tableau, et la recherche est stockée en mémoire que temporairement
-    ListRoute *searchResults = new ListRoute(routes->getSize(), false);
+    ListRoute *searchResults = new ListRoute(routes->GetSize(), false);
 
     Route *tmp;
 
-    for (unsigned int i = 0; i < routes->getSize(); ++i)
+    for (unsigned int i = 0; i < routes->GetSize(); ++i)
     {
-        tmp = routes->getElement(i);
+        tmp = routes->GetElement(i);
 
-        if (strcmp(tmp->getDeparture(), departureCity) == 0
-            && strcmp(tmp->getArrival(), arrivalCity) == 0)
+        if (strcmp(tmp->GetDeparture(), departureCity) == 0
+            && strcmp(tmp->GetArrival(), arrivalCity) == 0)
         { // Si les villes de départ et d'arrivée correspondent à la recherche
 
-            searchResults->addRoute(tmp);
+            searchResults->AddRoute(tmp);
         }
     }
 
@@ -64,19 +64,19 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
     delete searchResults;
 }
 
-void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
+void Catalog::AdvanceQuery(const char *departureCity, const char *arrivalCity)
 {
-    // TODO Advance query
+    // TODO Advance Query
     path = new ListRoute(DEFAULT_LIST_SIZE, false);
     visited = new ListRoute(DEFAULT_LIST_SIZE, false);
-    arrivalRoutes = routes->getArrivalTo(arrivalCity);
+    arrivalRoutes = routes->GetArrivalTo(arrivalCity);
     nbFind = 0;
 
-    ListRoute *baseRoutes = routes->getDepartureFrom(departureCity);
+    ListRoute *baseRoutes = routes->GetDepartureFrom(departureCity);
 
-    for (unsigned int i = 0; i < baseRoutes->getSize(); ++i)
+    for (unsigned int i = 0; i < baseRoutes->GetSize(); ++i)
     {
-        findPath(baseRoutes->getElement(i));
+        findPath(baseRoutes->GetElement(i));
     }
 
     delete baseRoutes;
@@ -93,9 +93,9 @@ void Catalog::findPath(Route *currentRoute)
 
     bool isArrived = false;
 
-    for (unsigned int i = 0; i < arrivalRoutes->getSize() && !isArrived; ++i)
+    for (unsigned int i = 0; i < arrivalRoutes->GetSize() && !isArrived; ++i)
     {
-        if (arrivalRoutes->getElement(i) == currentRoute)
+        if (arrivalRoutes->GetElement(i) == currentRoute)
         {
             isArrived = true;
         }
@@ -104,48 +104,48 @@ void Catalog::findPath(Route *currentRoute)
     if (isArrived)
     {
         nbFind++;
-        size_t size = path->getSize();
+        size_t size = path->GetSize();
         cout << "PARCOURS " << nbFind << " : --------------------------------------------------------" << endl;
         for (size_t i = 0; i < size; i++)
         {
-            path->getElement(i)->display();
+            path->GetElement(i)->Display();
             cout << endl;
         }
 
         // On affiche la dernière route
-        currentRoute->display();
+        currentRoute->Display();
         cout << endl
              << "FIN PARCOURS : --------------------------------------------------------" << endl;
 
     } else
     {
-        previousRoutes = routes->getArrivalTo(currentRoute->getDeparture());
+        previousRoutes = routes->GetArrivalTo(currentRoute->GetDeparture());
 
-        for (unsigned int i = 0; i < previousRoutes->getSize(); ++i)
+        for (unsigned int i = 0; i < previousRoutes->GetSize(); ++i)
         { // On ajoute les routes où on est passé
-            visited->addRoute(previousRoutes->getElement(i));
+            visited->AddRoute(previousRoutes->GetElement(i));
         }
 
-        path->addRoute(currentRoute);
+        path->AddRoute(currentRoute);
 
-        nextRoutes = routes->getDepartureFrom(currentRoute->getArrival());
+        nextRoutes = routes->GetDepartureFrom(currentRoute->GetArrival());
 
-        for (unsigned int i = 0; i < nextRoutes->getSize(); ++i)
+        for (unsigned int i = 0; i < nextRoutes->GetSize(); ++i)
         {
-            tmp = nextRoutes->getElement(i);
+            tmp = nextRoutes->GetElement(i);
 
-            if (!visited->has(tmp))
+            if (!visited->Has(tmp))
             {
                 findPath(tmp);
             }
         }
 
-        for (unsigned int i = 0; i < previousRoutes->getSize(); ++i)
+        for (unsigned int i = 0; i < previousRoutes->GetSize(); ++i)
         { // On enleve les routes où on est passé
-            visited->deleteRoute(previousRoutes->getElement(i));
+            visited->DeleteRoute(previousRoutes->GetElement(i));
         }
 
-        path->deleteRoute(path->getElement(path->getSize() - 1));
+        path->DeleteRoute(path->GetElement(path->GetSize() - 1));
 
         delete nextRoutes;
         delete previousRoutes;
@@ -153,18 +153,18 @@ void Catalog::findPath(Route *currentRoute)
 }
 
 
-bool Catalog::addRoute(const Route *route)
+bool Catalog::AddRoute(const Route *route)
 {
     /* Dans le cas où on verifie si la route existe
-    for (unsigned int i = 0; i < routes->getSize(); ++i)
+    for (unsigned int i = 0; i < routes->GetSize(); ++i)
     {
-        if (*route == *routes->getElement(i))
+        if (*route == *routes->GetElement(i))
         { // Vérifie que la route n'existe pas déjà
             return false;
         }
     }*/
 
-    routes->addRoute(route);
+    routes->AddRoute(route);
     return true;
 }
 

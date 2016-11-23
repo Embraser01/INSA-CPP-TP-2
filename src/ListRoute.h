@@ -25,24 +25,24 @@ using namespace std;
 class ListRoute
 {
 
-//--------------------------------------- Méthodes publiques
+    //--------------------------------------- Méthodes publiques
 
 public:
-    void addRoute(const Route *route);
+    void AddRoute(const Route *route);
 
-    ListRoute *getDepartureFrom(const char *city);
+    ListRoute *GetDepartureFrom(const char *city);
     //Contrat: city est une chaine de caracteres
 
-    ListRoute *getArrivalTo(const char *city);
+    ListRoute *GetArrivalTo(const char *city);
     //Contrat: city est une chaine de caracteres
 
-    size_t getSize() const;
+    size_t GetSize() const;
 
-    Route *getElement(size_t i) const;
+    Route *GetElement(size_t i) const;
 
-    bool deleteRoute (Route *route);
+    bool DeleteRoute(Route *route);
 
-    bool has(Route* route);
+    bool Has(Route *route);
 
 
     //--------------------------------------- Redéfinition d'opérateurs
@@ -54,19 +54,19 @@ public:
 
     virtual ~ListRoute();
 
-//--------------------------------------- Méthodes protégées ou privées
+    //--------------------------------------- Méthodes protégées ou privées
 
 protected:
 private:
 
-//--------------------------------------- Attributs et types protégés ou privés
+    //--------------------------------------- Attributs et types protégés ou privés
 
 protected:
 private:
     Route **routes; // Tableau contenant les routes
     size_t cardMax; // Taille du tableau
     unsigned int currentCard; // Nombre d'élements dans le tableau
-    bool deleteRoutesOnDestruct; // Flag pour savoir si on supprime chaque route dans le destructeur
+    bool deleteRoutesOnDestruct; // Flag pour savoir si on supprime chaque route dans le destructeur + DeleteRoute()
 };
 
 #endif //TP2_C_LISTROUTE_H

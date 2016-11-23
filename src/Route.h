@@ -15,11 +15,11 @@ class Route {
 
 public:
 
-    virtual char *getDeparture() const = 0;
+    virtual char *GetDeparture() const = 0;
 
-    virtual char *getArrival() const = 0;
+    virtual char *GetArrival() const = 0;
 
-    virtual void display() = 0;
+    virtual void Display() = 0;
     // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard le trajet
     //      Méthode virtuelle pure
 

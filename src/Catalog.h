@@ -25,16 +25,16 @@ class Catalog
 
 public:
 
-    void display();
+    void Display();
     // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard les trajets existants
     //
 
 
-    void query(const char *departureCity, const char *arrivalCity);
+    void Query(const char *departureCity, const char *arrivalCity);
 
-    void advanceQuery(const char *departureCity, const char *arrivalCity);
+    void AdvanceQuery(const char *departureCity, const char *arrivalCity);
 
-    bool addRoute(const Route *route);
+    bool AddRoute(const Route *route);
 
 
     //--------------------------------------- Redéfinition d'opérateurs
@@ -65,7 +65,7 @@ protected:
 private:
     ListRoute *routes; // Liste des trajets existants
 
-    // Pour la recherche avant
+    // Pour la recherche avancée
     ListRoute* visited;
     ListRoute* path;
     ListRoute* arrivalRoutes;
