@@ -40,7 +40,6 @@ ListRoute *ListRoute::getDepartureFrom(const char *city)
         {
             departure->addRoute(routes[i]);
         }
-
     }
 
     return departure;
@@ -75,20 +74,19 @@ Route *ListRoute::getElement(size_t i) const
 
 bool ListRoute::deleteRoute(Route *route)
 {
-    for (unsigned int i = 0; i < getSize(); i++)
+    for (unsigned int i = 0; i < currentCard; i++)
     {
         if (routes[i] == route)
         {
             if (deleteRoutesOnDestruct) delete route;
 
             currentCard--;
-            for (; i < getSize(); i++)
+            for (; i < currentCard; i++)
             {
                 routes[i] = routes[i + 1];
             }
-            routes[getSize()] = NULL;
+            routes[currentCard] = NULL;
             return true;
-
         }
     }
     return false;

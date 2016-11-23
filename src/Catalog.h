@@ -17,7 +17,6 @@ using namespace std;
 
 #include "ListRoute.h"
 #include "Route.h"
-#include "Stack.h"
 
 class Catalog
 {
@@ -57,7 +56,7 @@ private:
     // Cette méthode affiche le contenu de listRoute, elle est privé
     // car doit afficher uniquement les routes lui appartenant
 
-    void findPath(const char* currentNode);
+    void findPath(Route* currentRoute);
 
 
 //--------------------------------------- Attributs et types protégés ou privés
@@ -68,8 +67,8 @@ private:
 
     // Pour la recherche avant
     ListRoute* visited;
-    Stack* path;
-    char* targetNode;
+    ListRoute* path;
+    ListRoute* arrivalRoutes;
 };
 
 #endif //TP2_C_CATALOG_H

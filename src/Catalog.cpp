@@ -67,74 +67,90 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
 void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 {
     // TODO Advance query
-    path = new Stack();
+    path = new ListRoute(DEFAULT_LIST_SIZE, false);
     visited = new ListRoute(DEFAULT_LIST_SIZE, false);
-    targetNode = new char[strlen(arrivalCity) + 1];
-    strcpy(targetNode, arrivalCity);
+    arrivalRoutes = routes->getArrivalTo(arrivalCity);
 
-    findPath(departureCity);
+    ListRoute *baseRoutes = routes->getDepartureFrom(departureCity);
 
+    for (unsigned int i = 0; i < baseRoutes->getSize(); ++i)
+    {
+        findPath(baseRoutes->getElement(i));
+    }
+
+    delete baseRoutes;
     delete visited;
     delete path;
 }
 
-void Catalog::findPath(const char *currentNode)
+void Catalog::findPath(Route *currentRoute)
 {
     Route *tmp;
-    ListRoute *tmpList;
+    ListRoute *previousRoute;
+    ListRoute *nextRoutes;
 
-    if (strcasecmp(currentNode, targetNode) == 0)
+    bool isArrived = false;
+
+    for (unsigned int i = 0; i < arrivalRoutes->getSize() && !isArrived; ++i)
     {
-        cout << "DEBUG ";
-        // TODO Ne pas pop() mais lire, puis pop() ceux qui ne sont plus utiles
-        for (char *node = path->pop(); node != NULL; node = path->pop())
+        if (arrivalRoutes->getElement(i) == currentRoute)
         {
-            cout << node << ", ";
+            isArrived = true;
         }
-        cout << endl;
+    }
+
+    if (isArrived)
+    {
+        size_t size = path->getSize();
+        cout << "DEBUG 1 : --------------------------------------------------------" << endl;
+        for (size_t i = 0; i < size; i++)
+        {
+            path->getElement(i)->display();
+            cout << endl;
+        }
+
+        // On affiche la dernière route
+        currentRoute->display();
+        cout << endl
+             << "FIN DEBUG 1 : --------------------------------------------------------" << endl;
+/*
+        // On enlève la dernière route
+        path->deleteRoute(path->getElement(size - 1));*/
 
     } else
     {
-        for (unsigned int i = 0; i < routes->getSize(); ++i)
-        {
-            tmp = routes->getElement(i);
+        previousRoute = routes->getArrivalTo(currentRoute->getDeparture());
 
-            if (strcasecmp(tmp->getArrival(), currentNode) == 0)
-            { // Si les villes de départ et d'arrivée correspondent à la recherche
-
-                visited->addRoute(tmp);
-            }
+        for (unsigned int i = 0; i < previousRoute->getSize(); ++i)
+        { // On ajoute les routes où on est passé
+            visited->addRoute(previousRoute->getElement(i));
         }
 
-        path->push(currentNode);
+        path->addRoute(currentRoute);
 
-        tmpList = routes->getDepartureFrom(currentNode);
         // FIXME Memory leakssssss
 
-        for (unsigned int i = 0; i < tmpList->getSize(); ++i)
+        nextRoutes = routes->getDepartureFrom(currentRoute->getArrival());
+
+        for (unsigned int i = 0; i < nextRoutes->getSize(); ++i)
         {
-            tmp = tmpList->getElement(i);
-            cout << "DEBUG 2 : ";
-            tmp->display();
-            cout << endl;
+            tmp = nextRoutes->getElement(i);
 
             if (!visited->has(tmp))
             {
-                findPath(tmp->getArrival());
+                findPath(tmp);
             }
         }
 
-        for (unsigned int i = 0; i < routes->getSize(); ++i)
-        {
-            tmp = routes->getElement(i);
-
-            if (strcasecmp(tmp->getArrival(), currentNode) == 0)
-            { // Si les villes de départ et d'arrivée correspondent à la recherche
-
-                visited->deleteRoute(tmp);
-            }
+        for (unsigned int i = 0; i < previousRoute->getSize(); ++i)
+        { // On enleve les routes où on est passé
+            visited->deleteRoute(previousRoute->getElement(i));
         }
-        path->pop();
+
+        path->deleteRoute(path->getElement(path->getSize() - 1));
+
+        delete nextRoutes;
+        delete previousRoute;
     }
 }
 
