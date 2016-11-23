@@ -67,8 +67,89 @@ void Catalog::query(const char *departureCity, const char *arrivalCity)
 void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
 {
     // TODO Advance query
+    path = new ListRoute(DEFAULT_LIST_SIZE, false);
+    visited = new ListRoute(DEFAULT_LIST_SIZE, false);
+    arrivalRoutes = routes->getArrivalTo(arrivalCity);
+    nbFind = 0;
 
-    query(departureCity, arrivalCity);
+    ListRoute *baseRoutes = routes->getDepartureFrom(departureCity);
+
+    for (unsigned int i = 0; i < baseRoutes->getSize(); ++i)
+    {
+        findPath(baseRoutes->getElement(i));
+    }
+
+    delete baseRoutes;
+    delete visited;
+    delete path;
+    delete arrivalRoutes;
+}
+
+void Catalog::findPath(Route *currentRoute)
+{
+    Route *tmp;
+    ListRoute *previousRoutes;
+    ListRoute *nextRoutes;
+
+    bool isArrived = false;
+
+    for (unsigned int i = 0; i < arrivalRoutes->getSize() && !isArrived; ++i)
+    {
+        if (arrivalRoutes->getElement(i) == currentRoute)
+        {
+            isArrived = true;
+        }
+    }
+
+    if (isArrived)
+    {
+        nbFind++;
+        size_t size = path->getSize();
+        cout << "PARCOURS " << nbFind << " : --------------------------------------------------------" << endl;
+        for (size_t i = 0; i < size; i++)
+        {
+            path->getElement(i)->display();
+            cout << endl;
+        }
+
+        // On affiche la dernière route
+        currentRoute->display();
+        cout << endl
+             << "FIN PARCOURS : --------------------------------------------------------" << endl;
+
+    } else
+    {
+        previousRoutes = routes->getArrivalTo(currentRoute->getDeparture());
+
+        for (unsigned int i = 0; i < previousRoutes->getSize(); ++i)
+        { // On ajoute les routes où on est passé
+            visited->addRoute(previousRoutes->getElement(i));
+        }
+
+        path->addRoute(currentRoute);
+
+        nextRoutes = routes->getDepartureFrom(currentRoute->getArrival());
+
+        for (unsigned int i = 0; i < nextRoutes->getSize(); ++i)
+        {
+            tmp = nextRoutes->getElement(i);
+
+            if (!visited->has(tmp))
+            {
+                findPath(tmp);
+            }
+        }
+
+        for (unsigned int i = 0; i < previousRoutes->getSize(); ++i)
+        { // On enleve les routes où on est passé
+            visited->deleteRoute(previousRoutes->getElement(i));
+        }
+
+        path->deleteRoute(path->getElement(path->getSize() - 1));
+
+        delete nextRoutes;
+        delete previousRoutes;
+    }
 }
 
 

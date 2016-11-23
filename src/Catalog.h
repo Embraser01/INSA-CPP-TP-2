@@ -56,12 +56,21 @@ private:
     // Cette méthode affiche le contenu de listRoute, elle est privé
     // car doit afficher uniquement les routes lui appartenant
 
+    void findPath(Route* currentRoute);
+
 
 //--------------------------------------- Attributs et types protégés ou privés
 
 protected:
 private:
     ListRoute *routes; // Liste des trajets existants
+
+    // Pour la recherche avant
+    ListRoute* visited;
+    ListRoute* path;
+    ListRoute* arrivalRoutes;
+
+    unsigned int nbFind;
 };
 
 #endif //TP2_C_CATALOG_H

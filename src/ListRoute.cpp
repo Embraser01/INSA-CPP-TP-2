@@ -33,14 +33,13 @@ void ListRoute::addRoute(const Route *route)
 
 ListRoute *ListRoute::getDepartureFrom(const char *city)
 {
-    ListRoute *departure = new ListRoute();
+    ListRoute *departure = new ListRoute(DEFAULT_LIST_SIZE, false);
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (strcmp(routes[i]->getDeparture(), city) == 0)
         {
             departure->addRoute(routes[i]);
         }
-
     }
 
     return departure;
@@ -48,7 +47,7 @@ ListRoute *ListRoute::getDepartureFrom(const char *city)
 
 ListRoute *ListRoute::getArrivalTo(const char *city)
 {
-    ListRoute *arrival = new ListRoute();
+    ListRoute *arrival = new ListRoute(DEFAULT_LIST_SIZE, false);
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (strcmp(routes[i]->getArrival(), city) == 0)
@@ -71,6 +70,41 @@ Route *ListRoute::getElement(size_t i) const
 {
     return routes[i];
 }
+
+
+bool ListRoute::deleteRoute(Route *route)
+{
+    for (unsigned int i = 0; i < currentCard; i++)
+    {
+        if (routes[i] == route)
+        {
+            if (deleteRoutesOnDestruct) delete route;
+
+            currentCard--;
+            for (; i < currentCard; i++)
+            {
+                routes[i] = routes[i + 1];
+            }
+            routes[currentCard] = NULL;
+            return true;
+        }
+    }
+    return false;
+
+}
+
+bool ListRoute::has(Route *route)
+{
+    for (unsigned int i = 0; i < getSize(); i++)
+    {
+        if (routes[i] == route)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 ListRoute::ListRoute(size_t sizeInit, bool deleteRoutesOnDestruct)
 {
