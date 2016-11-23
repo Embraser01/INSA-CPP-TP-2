@@ -70,6 +70,7 @@ void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
     path = new ListRoute(DEFAULT_LIST_SIZE, false);
     visited = new ListRoute(DEFAULT_LIST_SIZE, false);
     arrivalRoutes = routes->getArrivalTo(arrivalCity);
+    nbFind = 0;
 
     ListRoute *baseRoutes = routes->getDepartureFrom(departureCity);
 
@@ -81,6 +82,7 @@ void Catalog::advanceQuery(const char *departureCity, const char *arrivalCity)
     delete baseRoutes;
     delete visited;
     delete path;
+    delete arrivalRoutes;
 }
 
 void Catalog::findPath(Route *currentRoute)
@@ -101,8 +103,9 @@ void Catalog::findPath(Route *currentRoute)
 
     if (isArrived)
     {
+        nbFind++;
         size_t size = path->getSize();
-        cout << "DEBUG 1 : --------------------------------------------------------" << endl;
+        cout << "PARCOURS " << nbFind << " : --------------------------------------------------------" << endl;
         for (size_t i = 0; i < size; i++)
         {
             path->getElement(i)->display();
@@ -112,7 +115,7 @@ void Catalog::findPath(Route *currentRoute)
         // On affiche la dernière route
         currentRoute->display();
         cout << endl
-             << "FIN DEBUG 1 : --------------------------------------------------------" << endl;
+             << "FIN PARCOURS : --------------------------------------------------------" << endl;
 /*
         // On enlève la dernière route
         path->deleteRoute(path->getElement(size - 1));*/
@@ -127,8 +130,6 @@ void Catalog::findPath(Route *currentRoute)
         }
 
         path->addRoute(currentRoute);
-
-        // FIXME Memory leakssssss
 
         nextRoutes = routes->getDepartureFrom(currentRoute->getArrival());
 

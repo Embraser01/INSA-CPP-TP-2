@@ -69,6 +69,8 @@ private:
     ListRoute* visited;
     ListRoute* path;
     ListRoute* arrivalRoutes;
+
+    unsigned int nbFind;
 };
 
 #endif //TP2_C_CATALOG_H
