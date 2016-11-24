@@ -28,7 +28,7 @@ class ComposedRoute : public Route
     // Mode d'emploi :
     //      Cette méthode permet de récupérer la ville d'arrivée du dernier trajet de <routes>
 
-    virtual void Display();
+    virtual void Display() const;
     // Mode d'emploi :
     //      Cette méthode permet d'afficher sur la sortie standard le trajet
     //      en utilisant la fonction Display() de chaque route et en séparant chaque route par un '-'

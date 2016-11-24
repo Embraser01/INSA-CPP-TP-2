@@ -25,7 +25,7 @@ char *ComposedRoute::GetArrival() const
     return routes->GetElement(routes->GetSize() - 1)->GetArrival();
 }
 
-void ComposedRoute::Display()
+void ComposedRoute::Display() const
 {
     // On affiche l'ensemble des trajets
 

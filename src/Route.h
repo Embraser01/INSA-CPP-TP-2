@@ -28,7 +28,7 @@ class Route
     //      Cette méthode permet de récupérer la ville d'arrivée
     //      Méthode virtuelle pure
 
-    virtual void Display() = 0;
+    virtual void Display() const = 0;
     // Mode d'emploi :
     //      Cette méthode permet d'afficher sur la sortie standard le trajet
     //      Méthode virtuelle pure
