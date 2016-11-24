@@ -1,20 +1,26 @@
+#include <iostream>
+#include <cstring>
+
 using namespace std;
 
-#include <iostream>
-
-#define BUFFER_SIZE 1000
-#define MAX_CONSOLE_LINES 20
+//------------------------------------------- Interfaces utilisées, Types, Constantes
 
 #include "Catalog.h"
 #include "SimpleRoute.h"
 #include "ComposedRoute.h"
 
-char buff[BUFFER_SIZE] = {'\0'};
+const int BUFFER_SIZE = 1000;
+const int MAX_CONSOLE_LINES = 20;
 
+char buff[BUFFER_SIZE] = {'\0'}; // Variable globale
+
+
+//--------------------------------------- Méthodes utilitaires (helpers)
 
 void clearConsole()
-{ // Permet d'effacer le contenu du terminal à defaut de pouvoir utiliser une autre lib...
-
+// Mode d'emploi :
+//      Permet d'effacer le contenu du terminal
+{
     for (int i = 0; i < MAX_CONSOLE_LINES; ++i)
     {
         cout << endl;
@@ -23,12 +29,19 @@ void clearConsole()
 
 
 void typeToContinue()
+// Mode d'emploi :
+//      Lance un "Appuyer sur ENTREE pour continuer..."
 {
     cout << "Appuyer sur ENTREE pour continuer...";
     cin.ignore(256, '\n');
 }
 
+
 char *trim(char *str)
+// Paramètre <str> : Chaîne de caractère à "trimmer"
+// Mode d'emploi :
+//      Permet de "trim" (enelver les espaces avant et après une phrase) une chaîne de caractères
+//      génère une nouvelle chaîne ! (à delete plus tard)
 {
     if (str == NULL)
     { return NULL; }
@@ -73,15 +86,22 @@ char *trim(char *str)
 }
 
 
-SimpleRoute *getSimpleRoute(char *string)
+SimpleRoute *getSimpleRoute(char *str)
+// Paramètre <str> : Chaîne de caractère à parser pour générer une SimpleRoute
+// Mode d'emploi :
+//      Renvoie une nouvelle instance de SimpleRoute depuis une chaîne de caractère de la forme :
+//              Moyen de transport ( Ville de départ, Ville d'arrivée)
+//      Renvoie NULL si la chaîne est malformée
 {
-    if (string == NULL)
-    { return NULL; }
+    if (str == NULL)
+    {
+        return NULL;
+    }
 
     char *savePtr; // Pour retenir la chaine utilisée
 
     // On recupère le moyen de transport (avant le '(')
-    char *transport = trim(strtok_r(string, "(", &savePtr));
+    char *transport = trim(strtok_r(str, "(", &savePtr));
 
     // On recupère la ville de départ (avant le ',')
     //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
@@ -119,42 +139,47 @@ SimpleRoute *getSimpleRoute(char *string)
 }
 
 
+//--------------------------------------- Méthodes
+
 void addRouteFromString(Catalog *catalog, const char *str)
+// Paramètre <catalog> : Catalog où ajouter la route générée
+// Paramètre <str> : Chaîne de caractère à parser pour générer une Route
+// Mode d'emploi :
+//      Ajoute à <catalog> la route générer depuis <str> qui est de la forme :
+//              Moyen de transport ( Ville de départ, Ville d'arrivée)[; MdT(VdeDépart, VdArrivee)]
+//
+//      Dans le cas d'une route composée, chaque trajet simple est séparée par ';'
 {
+
+    // On copie <str> dans une chaîne locale
+
     char *data = new char[strlen(str) + 1];
     strcpy(data, str);
 
+    Route *newRoute = NULL; // Route ajoutée au catalogue
+
     if (strpbrk(data, ";") == NULL)
-    { // Si c'est un trajet simple (pas de point virgule dans le buffer)
+    { // Si c'est un trajet simple (pas de point virgule dans la chaîne)
 
-        SimpleRoute *route = getSimpleRoute(data);
+        newRoute = getSimpleRoute(data);
 
-        if (route == NULL)
-        { // Si une des chaines est vide
+        if (newRoute == NULL)
+        { // Si la chaîne est malformée
 
             cout << "Erreur lors de la saisie !" << endl;
             typeToContinue();
             delete[] data;
             return;
         }
-
-        if (catalog->AddRoute(route))
-        {
-            cout << "Le trajet suivant a bien été ajouté : ";
-            route->Display();
-            cout << endl;
-        } else
-        {
-            cerr << "Ce trajet existe déjà !" << endl;
-            delete route;
-        };
     } else
-    { // Trajet composé
-        char *savePtr;
-        SimpleRoute *simpleRoute = NULL;
-        ComposedRoute *composedRoute = NULL;
+    { // Sinon, Trajet composé
 
-        char *partial = strtok_r(data, ";", &savePtr);
+        char *savePtr;
+
+        SimpleRoute *simpleRoute = NULL; // Trajet temporaire
+        ComposedRoute *composedRoute = NULL; // Futur trajet du catalogue
+
+        char *partial = strtok_r(data, ";", &savePtr); // Première partie de la chaîne
         while (partial != NULL)
         {
             simpleRoute = getSimpleRoute(partial);
@@ -163,8 +188,7 @@ void addRouteFromString(Catalog *catalog, const char *str)
             { // Si une des chaines est vide
 
                 cout << "Erreur lors de la saisie !" << endl;
-                if (composedRoute != NULL)
-                { delete composedRoute; }
+                delete composedRoute;
                 delete[] data;
                 typeToContinue();
                 return;
@@ -175,35 +199,36 @@ void addRouteFromString(Catalog *catalog, const char *str)
                 composedRoute = new ComposedRoute(simpleRoute);
             } else if (!composedRoute->AddSimpleRoute(simpleRoute))
             { // Sinon erreur lors de l'ajout de la route
-                cerr << "Erreur lors de l'insertion ! Vérifiez que les villes soient correctement rentrées" << endl;
-                typeToContinue();
 
-                delete[] data;
+                cerr << "Erreur lors de l'insertion ! Vérifiez que les villes soient correctement rentrées" << endl;
+
                 delete composedRoute;
                 delete simpleRoute;
+                delete[] data;
+                typeToContinue();
                 return;
             }
 
+            // On récupère la suite des trajets simples
             partial = strtok_r(NULL, ";", &savePtr);
         }
-
-
-        if (catalog->AddRoute(composedRoute))
-        {
-            cout << "Le trajet suivant a bien été ajouté : ";
-            composedRoute->Display();
-            cout << endl;
-        } else
-        {
-            cerr << "Ce trajet existe déjà !" << endl;
-            delete composedRoute;
-        };
+        newRoute = composedRoute;
     }
 
+    // On ajoute au catalogue la route et on notifie l'utilisateur
+
+    catalog->AddRoute(newRoute);
+    cout << "Le trajet suivant a bien été ajouté : ";
+    newRoute->Display();
+    cout << endl;
     delete[] data;
 }
 
+
 void addRoute(Catalog *catalog)
+// Paramètre <catalog> : Catalog où ajouter la route
+// Mode d'emploi :
+//      Demande à l'utilisateur de rentrer une route
 {
     clearConsole();
     cout << "#----------------------------------------------------------------------------------------------" << endl
@@ -228,6 +253,9 @@ void addRoute(Catalog *catalog)
 
 
 void displayCatalog(Catalog *catalog)
+// Paramètre <catalog> : Catalog à afficher
+// Mode d'emploi :
+//      Affiche le contenu de <catalog>
 {
     clearConsole();
     cout << "#----------------------------------------------------------------------------------------------" << endl
@@ -241,7 +269,13 @@ void displayCatalog(Catalog *catalog)
     typeToContinue();
 }
 
+
 void searchRoute(Catalog *catalog, bool advance = false)
+// Paramètre <catalog> : Catalog où rechercher
+// Paramètre <advance> : Flag pour savoir si la recherche est avancée
+// Mode d'emploi :
+//      Demande à l'utilisateur les villes de départ et d'arrivée pour la recherche
+//      Appelle la fonction de recherche de <catalog>
 {
     clearConsole();
     cout << "#----------------------------------------------------------------------------------------------" << endl
@@ -263,7 +297,6 @@ void searchRoute(Catalog *catalog, bool advance = false)
     char *savePtr;
 
     // On recupère la ville de départ (avant le ',')
-    //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
     char *departure = trim(strtok_r(buff, ",", &savePtr));
 
 
@@ -292,14 +325,17 @@ void searchRoute(Catalog *catalog, bool advance = false)
     typeToContinue();
 }
 
+
 void about()
+// Mode d'emploi :
+//     Affiche des informations statiques sur le programme
 {
     clearConsole();
     cout << "#----------------------------------------------------------------------------------------------"
          << endl
          << "#\t" << endl
          << "#\t" << endl
-         << "#\tApplication : Ultra promo voyage" << endl
+         << "#\tApplication : Catalogue de trajet" << endl
          << "#\tAuteurs : " << endl
          << "#\t" << "\tMarc-Antoine FERNANDES" << endl
          << "#\t" << "\tGuillaume MARCELIN" << endl
@@ -313,18 +349,20 @@ void about()
     typeToContinue();
 }
 
+
 int main()
 {
-    bool stop = false;
-    Catalog *catalog = new Catalog();
+    bool stop = false; // Variable d'arrêt
+    Catalog *catalog = new Catalog(); // Catalogue utilisé dans l'application
 
 
     for (; !stop;)
     { // Tant que l'utilisateur ne veut pas quitter
+
         clearConsole();
         cout << "#----------------------------------------------------------------------------------------------"
              << endl
-             << "#\t Ultra promo voyage" << endl
+             << "#\t Catalogue de trajet" << endl
              << "#\t" << endl
              << "#\t" << "\t1. Ajouter un trajet au catalogue" << endl
              << "#\t" << "\t2. Consulter le catalogue" << endl
@@ -342,7 +380,7 @@ int main()
 
 
         if (strlen(buff) == 1)
-        { // Si seulement un caractère !
+        { // Si seulement 1 caractère !
 
             switch (buff[0])
             {

@@ -12,6 +12,7 @@ const int DELTA_LIST_SIZE = 5; // Lorsque la liste est trop petite, on rajoute D
 //------------------------------------------- Rôle de la classe
 // Rôle : ListRoute a pour rôle
 //       de contenir une liste de Route
+//       Elle est ordonnée
 //-------------------------------------------
 
 class ListRoute

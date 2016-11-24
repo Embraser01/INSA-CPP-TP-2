@@ -65,7 +65,9 @@ class ComposedRoute : public Route
 
   protected:
   private:
-    ListRoute *routes; // Liste des routes qui composent ce trajet
+    // Liste des routes qui composent ce trajet.
+    // N.B.: la liste reste coherente ici car on utilise pas DeleteRoute()
+    ListRoute *routes;
 };
 
 #endif //TP2_C_COMPOSEDROUTE_H

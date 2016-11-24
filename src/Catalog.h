@@ -1,76 +1,97 @@
-/*************************************************************************
-                           Catalog  -  Contient l'ensemble des trajets
-                                        existants
-                             -------------------
-    début                : 14/11/2016
-*************************************************************************/
-
 #ifndef TP2_C_CATALOG_H
 #define TP2_C_CATALOG_H
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
-#include <iostream>
-#include <cstring>
-
-using namespace std;
-
 #include "ListRoute.h"
 #include "Route.h"
 
+
+//------------------------------------------- Rôle de la classe
+// Rôle : Catalog a pour rôle
+//       de contenir une liste de Route
+//       et de rechercher dans cette liste
+//-------------------------------------------
+
 class Catalog
 {
-
 //--------------------------------------- Méthodes publiques
 
-public:
+  public:
 
     void Display();
-    // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard les trajets existants
-    //
+    // Mode d'emploi :
+    //      Cette méthode permet d'afficher sur la sortie standard les trajets présent dans le catalogue
 
 
     void Query(const char *departureCity, const char *arrivalCity);
+    // Paramètre <departureCity> : Chaîne de caractère contenant la ville de départ
+    // Paramètre <arrivalCity> : Chaîne de caractère contenant la ville d'arrivée
+    // Mode d'emploi :
+    //      Cette méthode affiche une liste de trajets répondant
+    //      aux critères de recherche <departureCity> et <arrivalCity>
+
 
     void AdvanceQuery(const char *departureCity, const char *arrivalCity);
+    // Paramètre <departureCity> : Chaîne de caractère contenant la ville de départ
+    // Paramètre <arrivalCity> : Chaîne de caractère contenant la ville d'arrivée
+    // Mode d'emploi :
+    //      Cette méthode affiche une liste de trajets répondant
+    //      aux critères de recherche <departureCity> et <arrivalCity>.
+    //      Elle diffère de Query() par ça manière de rechercher :
+    //          AdvanceQuery() recherche toutes les combinaisons
+    //          de trajet existant entre <departureCity> et <arrivalCity>
 
-    bool AddRoute(const Route *route);
+
+    void AddRoute(const Route *route);
+    // Paramètre <route> : Route à ajouter au tableau <routes>
+    // Mode d'emploi :
+    //      Cette méthode ajoute <route> à la liste
 
 
     //--------------------------------------- Redéfinition d'opérateurs
 
-
     //--------------------------------------- Constructeurs - destructeur
 
-
     Catalog();
+    // Mode d'emploi :
+    //      Ce constructeur initialise une nouvelle ListeRoute
 
     virtual ~Catalog();
+    // Destructeur
 
 
 //--------------------------------------- Méthodes protégées ou privées
 
-protected:
-private:
-    void display(ListRoute* listRoute, const char *departureCity, const char *arrivalCity);
-    // Cette méthode affiche le contenu de listRoute, elle est privé
-    // car doit afficher uniquement les routes lui appartenant
+  protected:
+  private:
+    void display(ListRoute *listRoute, const char *departureCity, const char *arrivalCity);
+    // Paramètre <listRoute> : ListeRoute à afficher
+    // Paramètre <departureCity> : Chaîne de caractère contenant la ville de départ (dans le cas d'une recherche)
+    // Paramètre <arrivalCity> : Chaîne de caractère contenant la ville d'arrivée (dans le cas d'une recherche)
+    // Mode d'emploi :
+    //      Cette méthode affiche le contenu de <listRoute>, elle est privé
+    //      car doit afficher uniquement les routes lui appartenant
 
-    void findPath(Route* currentRoute);
 
+    void findPath(Route *currentRoute);
+    // Paramètre <currentRoute> : Route où démarrer la recherche
+    // Mode d'emploi :
+    //      Cette méthode est récursive,
+    //      elle est utilisée par AdvanceQuery(),
 
 //--------------------------------------- Attributs et types protégés ou privés
 
-protected:
-private:
+  protected:
+  private:
     ListRoute *routes; // Liste des trajets existants
 
-    // Pour la recherche avancée
-    ListRoute* visited;
-    ListRoute* path;
-    ListRoute* arrivalRoutes;
+    // Pour AdvanceQuery() (recherche advancée)
 
-    unsigned int nbFind;
+    ListRoute *visited; // Liste des routes déjà visitées
+    ListRoute *path; // Liste des chemins pris pour trouver une combinaison
+    ListRoute *arrivalRoutes; // Liste contenant les routes pour arriver à <arrivalCity>
+    unsigned int nbFind; // Nombre de combinaisons trouvées
 };
 
 #endif //TP2_C_CATALOG_H
