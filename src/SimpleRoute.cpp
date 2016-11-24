@@ -1,38 +1,38 @@
-/*************************************************************************
-                           SimpleRoute  -  description
-                             -------------------
-    début                : 14 Nov 2016
-    copyright            : (C) 2016 par lucasono
-    e-mail               : lucas.okumura-ono@insa-lyon.fr
-*************************************************************************/
+#include <iostream>
+#include <cstring>
 
-//---------- Réalisation du module <SimpleRoute> (fichier SimpleRoute.cpp) ---------------
+using namespace std;
 
-/////////////////////////////////////////////////////////////////  INCLUDE
-//-------------------------------------------------------- Include système
-
-//------------------------------------------------------ Include personnel
 #include "SimpleRoute.h"
 
-///////////////////////////////////////////////////////////////////  PRIVE
-//------------------------------------------------------------- Constantes
+//------------------------------------------- Constantes, statiques et types privés
 
-//------------------------------------------------------------------ Types
+//#define MAP
 
-//---------------------------------------------------- Variables statiques
+//------------------------------------------- Méthodes protégées et privées
 
-//------------------------------------------------------ Fonctions privées
-//static type nom ( liste de paramètres )
-// Mode d'emploi :
-//
-// Contrat :
-//
-// Algorithme :
-//
-//{
-//} //----- fin de nom
+//------------------------------------------- METHODES PUBLIC
 
-//////////////////////////////////////////////////////////////////  PUBLIC
+char *SimpleRoute::GetDeparture() const
+{
+    return departure;
+}
+
+char *SimpleRoute::GetArrival() const
+{
+    return arrival;
+}
+
+void SimpleRoute::Display() const
+{
+    cout << "De " << departure << " vers " << arrival << " en " << transport;
+}
+
+
+//------------------------------------------- Redefinition d'operateurs
+
+//------------------------------------------- Constructeurs - destructeur
+
 SimpleRoute::SimpleRoute(const char *departure,
                          const char *arrival,
                          const char *transport)
@@ -51,11 +51,6 @@ SimpleRoute::SimpleRoute(const char *departure,
 #endif
 }
 
-void SimpleRoute::Display()
-{
-    cout << "De " << departure << " vers " << arrival << " en " << transport;
-}
-
 
 SimpleRoute::~SimpleRoute()
 {
@@ -67,9 +62,3 @@ SimpleRoute::~SimpleRoute()
     cout << "Appel au destructeur de <SimpleRoute>" << endl;
 #endif
 }
-//---------------------------------------------------- Fonctions publiques
-//type Nom ( liste de paramètres )
-// Algorithme :
-//
-//{
-//} //----- fin de Nom

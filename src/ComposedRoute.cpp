@@ -1,30 +1,29 @@
-/*************************************************************************
-                           ComposedRoute  -  Description
-                             -------------------
-    début                : 14/11/2016
-    e-mail               : $EMAIL
-*************************************************************************/
+#include <cstring>
+#include <iostream>
+
+using namespace std;
 
 #include "ComposedRoute.h"
 
+//------------------------------------------- Constantes, statiques et types privés
+
+//#define MAP
+
+//------------------------------------------- Méthodes protégées et privées
+
+//------------------------------------------- METHODES PUBLIC
+
 char *ComposedRoute::GetDeparture() const
 {
-    if (routes != NULL && routes->GetSize() > 0)
-    {
-        return routes->GetElement(0)->GetDeparture();
-    }
-    return NULL;
+    // <routes> est déjà initialisée avec au moins une routes
+    return routes->GetElement(0)->GetDeparture();
 }
 
 char *ComposedRoute::GetArrival() const
 {
-    if (routes != NULL && routes->GetSize() > 0)
-    {
-        return routes->GetElement(routes->GetSize() - 1)->GetArrival();
-    }
-    return NULL;
+    // <routes> est déjà initialisée avec au moins une routes
+    return routes->GetElement(routes->GetSize() - 1)->GetArrival();
 }
-
 
 void ComposedRoute::Display()
 {
@@ -36,13 +35,13 @@ void ComposedRoute::Display()
         cout << " — ";
     }
 
+    // On affiche le dernier
     routes->GetElement(routes->GetSize() - 1)->Display();
 }
 
-
 bool ComposedRoute::AddSimpleRoute(const SimpleRoute *simpleRoute)
 {
-    // On verifie que la derniere ville d'arrivée est celle de départ !
+    // On verifie que la dernière ville d'arrivée est celle de départ !
 
     if (strcmp(routes->GetElement(routes->GetSize() - 1)->GetArrival(), simpleRoute->GetDeparture()) == 0)
     {
@@ -53,6 +52,10 @@ bool ComposedRoute::AddSimpleRoute(const SimpleRoute *simpleRoute)
     return false;
 }
 
+
+//------------------------------------------- Redefinition d'operateurs
+
+//------------------------------------------- Constructeurs - destructeur
 
 ComposedRoute::ComposedRoute(const SimpleRoute *route)
 {
@@ -66,8 +69,8 @@ ComposedRoute::ComposedRoute(const SimpleRoute *route)
 
 ComposedRoute::~ComposedRoute()
 {
-
     delete routes;
+
 #ifdef MAP
     cout << "Appel au destructeur de <ComposedRoute>" << endl;
 #endif

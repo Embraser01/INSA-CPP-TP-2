@@ -1,26 +1,36 @@
-/*************************************************************************
-                           Route  -  Représente un trajet (classe abstraite)
-                             -------------------
-    début                : 14/11/2016
-*************************************************************************/
-
 #ifndef TP2_C_ROUTE_H
 #define TP2_C_ROUTE_H
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
-class Route {
 
+//------------------------------------------- Rôle de la classe
+// Rôle : Route a pour rôle
+//       de représenter un trajet
+//       avec au moins une ville de départ
+//       et une ville d'arrivée.
+//       La classe est abstraite
+//-------------------------------------------
+
+class Route
+{
 //--------------------------------------- Méthodes publiques
 
-public:
+  public:
 
     virtual char *GetDeparture() const = 0;
+    // Mode d'emploi :
+    //      Cette méthode permet de récupérer la ville de départ
+    //      Méthode virtuelle pure
 
     virtual char *GetArrival() const = 0;
+    // Mode d'emploi :
+    //      Cette méthode permet de récupérer la ville d'arrivée
+    //      Méthode virtuelle pure
 
     virtual void Display() = 0;
-    // Mode d'emploi : cette méthode permet d'afficher sur la sortie standard le trajet
+    // Mode d'emploi :
+    //      Cette méthode permet d'afficher sur la sortie standard le trajet
     //      Méthode virtuelle pure
 
 
@@ -29,17 +39,18 @@ public:
     //--------------------------------------- Constructeurs - destructeur
 
     virtual ~Route();
+    // Destructeur
 
 
 //--------------------------------------- Méthodes protégées ou privées
 
-protected:
-private:
+  protected:
+  private:
 
 //--------------------------------------- Attributs et types protégés ou privés
 
-protected:
-private:
+  protected:
+  private:
 
 };
 

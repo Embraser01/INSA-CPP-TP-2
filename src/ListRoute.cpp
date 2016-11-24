@@ -1,15 +1,22 @@
-//
-// Created by gmarcelin on 14/11/16.
-//
+#include <iostream>
+#include <cstring>
 
+using namespace std;
 
 #include "ListRoute.h"
 
+//------------------------------------------- Constantes, statiques et types privés
+
+//#define MAP
+
+//------------------------------------------- Méthodes protégées et privées
+
+//------------------------------------------- METHODES PUBLIC
 
 void ListRoute::AddRoute(const Route *route)
 {
     if (this->cardMax <= this->currentCard)
-    { // Si pas assez de place
+    { // Si pas assez de place, on agrandit le tableau de DELTA_LIST_SIZE
 
         cardMax += DELTA_LIST_SIZE;
 
@@ -33,7 +40,10 @@ void ListRoute::AddRoute(const Route *route)
 
 ListRoute *ListRoute::GetDepartureFrom(const char *city)
 {
+    // On crée une nouvelle liste qui va contenir les routes partant de <city>
+    // Cette nouvelle liste ne supprimera pas les routes lors de sa suppression
     ListRoute *departureRoutes = new ListRoute(DEFAULT_LIST_SIZE, false);
+
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (strcmp(routes[i]->GetDeparture(), city) == 0)
@@ -47,18 +57,19 @@ ListRoute *ListRoute::GetDepartureFrom(const char *city)
 
 ListRoute *ListRoute::GetArrivalTo(const char *city)
 {
+    // On crée une nouvelle liste qui va contenir les routes arrivant à <city>
+    // Cette nouvelle liste ne supprimera pas les routes lors de sa suppression
     ListRoute *arrivalRoutes = new ListRoute(DEFAULT_LIST_SIZE, false);
+
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (strcmp(routes[i]->GetArrival(), city) == 0)
         {
             arrivalRoutes->AddRoute(routes[i]);
         }
-
     }
 
     return arrivalRoutes;
-
 }
 
 size_t ListRoute::GetSize() const
@@ -68,30 +79,39 @@ size_t ListRoute::GetSize() const
 
 Route *ListRoute::GetElement(size_t i) const
 {
-    return routes[i];
+    if (i < currentCard)
+    {
+        return routes[i];
+    }
+    return NULL;
 }
-
 
 bool ListRoute::DeleteRoute(Route *route)
 {
     for (unsigned int i = 0; i < currentCard; i++)
     {
         if (routes[i] == route)
-        {
-            if (deleteRoutesOnDestruct)
+        { // Même addresse
+
+            if (deleteRouteOnRemove)
             {
                 delete route;
             }
 
             currentCard--;
+
             for (; i < currentCard; i++)
-            {
+            { // On décale les routes d'après
                 routes[i] = routes[i + 1];
             }
+
+            // Par précaution on met la dernière route à NULL
             routes[currentCard] = NULL;
             return true;
         }
     }
+
+    // Si aucune suppression
     return false;
 
 }
@@ -109,12 +129,16 @@ bool ListRoute::Has(Route *route)
 }
 
 
-ListRoute::ListRoute(size_t sizeInit, bool deleteRoutesOnDestruct)
+//------------------------------------------- Redefinition d'operateurs
+
+//------------------------------------------- Constructeurs - destructeur
+
+ListRoute::ListRoute(size_t sizeInit, bool deleteRouteOnRemove)
 {
     this->cardMax = sizeInit;
     this->currentCard = 0;
     this->routes = new Route *[cardMax];
-    this->deleteRoutesOnDestruct = deleteRoutesOnDestruct;
+    this->deleteRouteOnRemove = deleteRouteOnRemove;
 
 #ifdef MAP
     cout << "Appel au constructeur de <ListRoute>" << endl;
@@ -124,15 +148,16 @@ ListRoute::ListRoute(size_t sizeInit, bool deleteRoutesOnDestruct)
 
 ListRoute::~ListRoute()
 {
-    if (deleteRoutesOnDestruct)
-    {
+    if (deleteRouteOnRemove)
+    { // On supprime chaque route si besoin
+
         for (unsigned int i = 0; i < currentCard; ++i)
         {
             delete routes[i];
         }
     }
 
-    delete[]routes;
+    delete[] routes;
 
 #ifdef MAP
     cout << "Appel au destructeur de <ListRoute>" << endl;
