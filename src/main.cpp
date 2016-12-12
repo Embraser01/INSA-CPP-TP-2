@@ -1,5 +1,7 @@
 #include <iostream>
-#include <cstring>
+#include <string>
+#include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -37,111 +39,133 @@ void typeToContinue()
 }
 
 
-char *trim(char *str)
+string trim(const string &str)
 // Paramètre <str> : Chaîne de caractère à "trimmer"
 // Mode d'emploi :
 //      Permet de "trim" (enelver les espaces avant et après une phrase) une chaîne de caractères
 //      génère une nouvelle chaîne ! (à delete plus tard)
 {
-    if (str == NULL)
-    { return NULL; }
-
-    size_t size = strlen(str);
-    unsigned int first = 0;
-    unsigned int last = (unsigned int) size;
-
-    bool firstFound = false;
-    bool lastFound = false;
-
-    for (unsigned int i = 0; i < size && (!firstFound || !lastFound); ++i)
+    size_t first = str.find_first_not_of(' ');
+    if (string::npos == first)
     {
-        if (!firstFound && str[i] != ' ')
-        {
-            firstFound = true;
-            first = i;
-        }
-
-        if (!lastFound && str[size - i - 1] != ' ')
-        {
-            lastFound = true;
-            last = (unsigned int) size - i;
-        }
+        return str;
     }
-
-    size_t newSize = last - first;
-
-    // On refuse les chaines vides
-    if (!firstFound || !lastFound)
-    { return NULL; }
-
-    char *newStr = new char[newSize + 1];
-    newStr[newSize] = '\0';
-
-    for (unsigned int j = 0; j < newSize; ++j)
-    {
-        newStr[j] = str[j + first];
-    }
-
-    return newStr;
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
 }
 
 
-SimpleRoute *getSimpleRoute(char *str)
+// From : http://stackoverflow.com/a/236803/5285167
+
+void split(const string &s, char delim, vector <string> &elems)
+{
+    stringstream ss;
+    ss.str(s);
+    string item;
+    while (getline(ss, item, delim))
+    {
+        elems.push_back(item);
+    }
+}
+
+
+vector <string> split(const string &s, char delim)
+{
+    vector <string> elems;
+    split(s, delim, elems);
+    return elems;
+}
+
+
+SimpleRoute *getSimpleRoute(string str)
 // Paramètre <str> : Chaîne de caractère à parser pour générer une SimpleRoute
 // Mode d'emploi :
 //      Renvoie une nouvelle instance de SimpleRoute depuis une chaîne de caractère de la forme :
 //              Moyen de transport ( Ville de départ, Ville d'arrivée)
 //      Renvoie NULL si la chaîne est malformée
 {
-    if (str == NULL)
+    if (str.empty())
     {
         return NULL;
     }
 
-    char *savePtr; // Pour retenir la chaine utilisée
+    size_t start = str.find("(");
+    size_t end = start;
 
     // On recupère le moyen de transport (avant le '(')
-    char *transport = trim(strtok_r(str, "(", &savePtr));
+    string transport = trim(str.substr(0, end));
 
     // On recupère la ville de départ (avant le ',')
-    //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *departure = trim(strtok_r(NULL, ",", &savePtr));
+    start++;
+    end = str.find(",", start);
+    string departure = trim(str.substr(start, end - start));
 
 
     // On recupère la ville d'arrivée (avant le ')')
-    //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *arrival = trim(strtok_r(NULL, ")", &savePtr));
+    start = end + 1;
+    end = str.find(")", start);
+    string arrival = trim(str.substr(start, end - start));
 
 
     // S'il manque un élément
-    if (transport == NULL
-        || departure == NULL
-        || arrival == NULL)
+    if (transport.empty()
+        || departure.empty()
+        || arrival.empty())
     {
-        // On supprime les autres chaines si elles existent
-        if (transport != NULL)
-        { delete[] transport; }
-        if (departure != NULL)
-        { delete[] departure; }
-        if (arrival != NULL)
-        { delete[] arrival; }
-
         return NULL;
     }
 
-    SimpleRoute *simpleRoute = new SimpleRoute(departure, arrival, transport);
-
-    delete[] transport;
-    delete[] departure;
-    delete[] arrival;
-
-    return simpleRoute;
+    return new SimpleRoute(departure, arrival, transport);
 }
+
+
+Route *getRoute(const string str)
+{
+
+    vector <string> routes = split(str, ';');
+    if (routes.size() == 0)
+    {
+        return NULL;
+    }
+
+    if (routes.size() == 1)
+    { // Si c'est une route simple
+        return getSimpleRoute(str);
+    }
+
+
+    // Sinon
+    ComposedRoute *composedRoute = NULL;
+    SimpleRoute *tmp;
+
+    for (vector<string>::iterator it = routes.begin(); it < routes.end(); it++)
+    {
+        tmp = getSimpleRoute(*it);
+        if (tmp == NULL)
+        { // Si mauvaise syntaxe
+            delete composedRoute;
+            return NULL;
+        }
+
+        if (composedRoute == NULL)
+        { // Si c'est la première route
+            composedRoute = new ComposedRoute(tmp);
+        } else if (!composedRoute->AddSimpleRoute(tmp))
+        { // Si erreur pour l'ajout
+            delete tmp;
+            delete composedRoute;
+            return NULL;
+        }
+    }
+
+    return composedRoute;
+}
+
 
 
 //--------------------------------------- Méthodes
 
-void addRouteFromString(Catalog *catalog, const char *str)
+void addRouteFromString(Catalog *catalog, const string str)
 // Paramètre <catalog> : Catalog où ajouter la route générée
 // Paramètre <str> : Chaîne de caractère à parser pour générer une Route
 // Mode d'emploi :
@@ -151,68 +175,12 @@ void addRouteFromString(Catalog *catalog, const char *str)
 //      Dans le cas d'une route composée, chaque trajet simple est séparée par ';'
 {
 
-    // On copie <str> dans une chaîne locale
+    Route *newRoute = getRoute(str);
 
-    char *data = new char[strlen(str) + 1];
-    strcpy(data, str);
-
-    Route *newRoute = NULL; // Route ajoutée au catalogue
-
-    if (strpbrk(data, ";") == NULL)
-    { // Si c'est un trajet simple (pas de point virgule dans la chaîne)
-
-        newRoute = getSimpleRoute(data);
-
-        if (newRoute == NULL)
-        { // Si la chaîne est malformée
-
-            cout << "Erreur lors de la saisie !" << endl;
-            typeToContinue();
-            delete[] data;
-            return;
-        }
-    } else
-    { // Sinon, Trajet composé
-
-        char *savePtr;
-
-        SimpleRoute *simpleRoute = NULL; // Trajet temporaire
-        ComposedRoute *composedRoute = NULL; // Futur trajet du catalogue
-
-        char *partial = strtok_r(data, ";", &savePtr); // Première partie de la chaîne
-        while (partial != NULL)
-        {
-            simpleRoute = getSimpleRoute(partial);
-
-            if (simpleRoute == NULL)
-            { // Si une des chaines est vide
-
-                cout << "Erreur lors de la saisie !" << endl;
-                delete composedRoute;
-                delete[] data;
-                typeToContinue();
-                return;
-            }
-
-            if (composedRoute == NULL)
-            { // Lors du premier loop, on instancie la route composée
-                composedRoute = new ComposedRoute(simpleRoute);
-            } else if (!composedRoute->AddSimpleRoute(simpleRoute))
-            { // Sinon erreur lors de l'ajout de la route
-
-                cerr << "Erreur lors de l'insertion ! Vérifiez que les villes soient correctement rentrées" << endl;
-
-                delete composedRoute;
-                delete simpleRoute;
-                delete[] data;
-                typeToContinue();
-                return;
-            }
-
-            // On récupère la suite des trajets simples
-            partial = strtok_r(NULL, ";", &savePtr);
-        }
-        newRoute = composedRoute;
+    if (newRoute == NULL)
+    { // Si pas valide
+        cout << "Erreur lors de l'insertion !" << endl;
+        return;
     }
 
     // On ajoute au catalogue la route et on notifie l'utilisateur
@@ -221,7 +189,6 @@ void addRouteFromString(Catalog *catalog, const char *str)
     cout << "Le trajet suivant a bien été ajouté : ";
     newRoute->Display();
     cout << endl;
-    delete[] data;
 }
 
 
@@ -245,9 +212,10 @@ void addRoute(Catalog *catalog)
          << "#----------------------------------------------------------------------------------------------" << endl
          << "Saisisser le trajet : ";
 
-    cin.getline(buff, BUFFER_SIZE);
+    string route;
 
-    addRouteFromString(catalog, buff);
+    getline(cin, route);
+    addRouteFromString(catalog, route);
     typeToContinue();
 }
 
@@ -292,17 +260,17 @@ void searchRoute(Catalog *catalog, bool advance = false)
          << "#----------------------------------------------------------------------------------------------" << endl
          << "Saisisser la recherche : ";
 
-    cin.getline(buff, BUFFER_SIZE);
+    string research;
 
-    char *savePtr;
+    getline(cin, research);
+
 
     // On recupère la ville de départ (avant le ',')
-    char *departure = trim(strtok_r(buff, ",", &savePtr));
+    string departure = trim(research.substr(0, research.find(",")));
 
 
     // On recupère la ville d'arrivée (après le ',')
-    //  Envoyer la valeur NULL permet d'utiliser la derniere chaine
-    char *arrival = trim(strtok_r(NULL, "", &savePtr));
+    string arrival = trim(research.substr(research.find(","), string::npos));
 
     clearConsole();
     cout << "#----------------------------------------------------------------------------------------------" << endl
@@ -318,9 +286,6 @@ void searchRoute(Catalog *catalog, bool advance = false)
     }
 
     cout << "#----------------------------------------------------------------------------------------------" << endl;
-
-    delete[] departure;
-    delete[] arrival;
 
     typeToContinue();
 }
@@ -354,6 +319,7 @@ int main()
 {
     bool stop = false; // Variable d'arrêt
     Catalog *catalog = new Catalog(); // Catalogue utilisé dans l'application
+    string choice = "";
 
 
     for (; !stop;)
@@ -376,13 +342,13 @@ int main()
              << "#----------------------------------------------------------------------------------------------"
              << endl
              << "Saisisser l'option voulue : ";
-        cin.getline(buff, BUFFER_SIZE);
+        getline(cin, choice);
 
 
-        if (strlen(buff) == 1)
+        if (choice.size() == 1)
         { // Si seulement 1 caractère !
 
-            switch (buff[0])
+            switch (choice[0])
             {
                 case '1':
                     addRoute(catalog);

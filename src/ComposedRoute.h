@@ -7,6 +7,8 @@
 #include "Route.h"
 #include "SimpleRoute.h"
 
+#include <string>
+
 
 //------------------------------------------- Rôle de la classe
 // Rôle : ComposedRoute a pour rôle
@@ -18,13 +20,13 @@ class ComposedRoute : public Route
 {
 //--------------------------------------- Méthodes publiques
 
-  public:
+public:
 
-    virtual char *GetDeparture() const;
+    virtual std::string GetDeparture() const;
     // Mode d'emploi :
     //      Cette méthode permet de récupérer la ville de départ du premier trajet de <routes>
 
-    virtual char *GetArrival() const;
+    virtual std::string GetArrival() const;
     // Mode d'emploi :
     //      Cette méthode permet de récupérer la ville d'arrivée du dernier trajet de <routes>
 
@@ -58,13 +60,13 @@ class ComposedRoute : public Route
 
 //--------------------------------------- Méthodes protégées ou privées
 
-  protected:
-  private:
+protected:
+private:
 
 //--------------------------------------- Attributs et types protégés ou privés
 
-  protected:
-  private:
+protected:
+private:
     // Liste des routes qui composent ce trajet.
     // N.B.: la liste reste coherente ici car on utilise pas DeleteRoute()
     ListRoute *routes;

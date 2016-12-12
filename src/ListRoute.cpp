@@ -38,7 +38,7 @@ void ListRoute::AddRoute(const Route *route)
     routes[currentCard++] = (Route *) route;
 }
 
-ListRoute *ListRoute::GetDepartureFrom(const char *city)
+ListRoute *ListRoute::GetDepartureFrom(const string city)
 {
     // On crée une nouvelle liste qui va contenir les routes partant de <city>
     // Cette nouvelle liste ne supprimera pas les routes lors de sa suppression
@@ -46,7 +46,7 @@ ListRoute *ListRoute::GetDepartureFrom(const char *city)
 
     for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (strcmp(routes[i]->GetDeparture(), city) == 0)
+        if (routes[i]->GetDeparture() == city)
         {
             departureRoutes->AddRoute(routes[i]);
         }
@@ -55,7 +55,7 @@ ListRoute *ListRoute::GetDepartureFrom(const char *city)
     return departureRoutes;
 }
 
-ListRoute *ListRoute::GetArrivalTo(const char *city)
+ListRoute *ListRoute::GetArrivalTo(const string city)
 {
     // On crée une nouvelle liste qui va contenir les routes arrivant à <city>
     // Cette nouvelle liste ne supprimera pas les routes lors de sa suppression
@@ -63,7 +63,7 @@ ListRoute *ListRoute::GetArrivalTo(const char *city)
 
     for (unsigned int i = 0; i < currentCard; i++)
     {
-        if (strcmp(routes[i]->GetArrival(), city) == 0)
+        if (routes[i]->GetArrival() == city)
         {
             arrivalRoutes->AddRoute(routes[i]);
         }

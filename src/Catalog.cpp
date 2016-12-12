@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstring>
+#include <string>
 
 using namespace std;
 
@@ -12,11 +12,11 @@ using namespace std;
 //------------------------------------------- Méthodes protégées et privées
 
 
-void Catalog::display(ListRoute *listRoute, const char *departureCity, const char *arrivalCity)
+void Catalog::display(ListRoute *listRoute, const string departureCity, const string arrivalCity)
 {
     // On affiche le header
 
-    if (departureCity != NULL && arrivalCity != NULL)
+    if (!departureCity.empty() && !arrivalCity.empty())
     { // Si c'est une recherche
 
         cout << "#\tTrajets existant entre " << departureCity << " et " << arrivalCity << " :" << endl;
@@ -141,10 +141,10 @@ void Catalog::findPath(Route *currentRoute)
 
 void Catalog::Display()
 {
-    display(routes, NULL, NULL);
+    display(routes, "", "");
 }
 
-void Catalog::Query(const char *departureCity, const char *arrivalCity)
+void Catalog::Query(const string departureCity, const string arrivalCity)
 {
     // On créé une liste de la même taille du catalogue existant pour optimiser les performances
     // car pas besoin de recopier le tableau, et la recherche est stockée en mémoire que temporairement
@@ -156,8 +156,8 @@ void Catalog::Query(const char *departureCity, const char *arrivalCity)
     {
         tmp = routes->GetElement(i);
 
-        if (strcmp(tmp->GetDeparture(), departureCity) == 0
-            && strcmp(tmp->GetArrival(), arrivalCity) == 0)
+        if (tmp->GetDeparture() == departureCity
+            && tmp->GetArrival() == arrivalCity)
         { // Si les villes de départ et d'arrivée correspondent à la recherche
 
             searchResults->AddRoute(tmp);
@@ -170,7 +170,7 @@ void Catalog::Query(const char *departureCity, const char *arrivalCity)
     delete searchResults;
 }
 
-void Catalog::AdvanceQuery(const char *departureCity, const char *arrivalCity)
+void Catalog::AdvanceQuery(const string departureCity, const string arrivalCity)
 {
     // On initialise les différents attributs nécessaires pour la suite de la recherche
 

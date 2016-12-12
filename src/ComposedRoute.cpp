@@ -1,5 +1,5 @@
-#include <cstring>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -13,13 +13,13 @@ using namespace std;
 
 //------------------------------------------- METHODES PUBLIC
 
-char *ComposedRoute::GetDeparture() const
+string ComposedRoute::GetDeparture() const
 {
     // <routes> est déjà initialisée avec au moins une routes
     return routes->GetElement(0)->GetDeparture();
 }
 
-char *ComposedRoute::GetArrival() const
+string ComposedRoute::GetArrival() const
 {
     // <routes> est déjà initialisée avec au moins une routes
     return routes->GetElement(routes->GetSize() - 1)->GetArrival();
@@ -43,7 +43,7 @@ bool ComposedRoute::AddSimpleRoute(const SimpleRoute *simpleRoute)
 {
     // On verifie que la dernière ville d'arrivée est celle de départ !
 
-    if (strcmp(routes->GetElement(routes->GetSize() - 1)->GetArrival(), simpleRoute->GetDeparture()) == 0)
+    if (routes->GetElement(routes->GetSize() - 1)->GetArrival() == simpleRoute->GetDeparture())
     {
         routes->AddRoute(simpleRoute);
         return true;

@@ -5,6 +5,8 @@
 
 #include "Route.h"
 
+#include <string>
+
 const int DEFAULT_LIST_SIZE = 10; // Taille par defaut de la liste
 const int DELTA_LIST_SIZE = 5; // Lorsque la liste est trop petite, on rajoute DELTA_LIST_SIZE cases
 
@@ -19,7 +21,7 @@ class ListRoute
 {
 //--------------------------------------- Méthodes publiques
 
-  public:
+public:
 
     void AddRoute(const Route *route);
     // Paramètre <route> : Route à ajouter au tableau <routes>
@@ -27,13 +29,13 @@ class ListRoute
     //      Cette méthode ajoute <route> au tableau dynamique <routes>
 
 
-    ListRoute *GetDepartureFrom(const char *city);
+    ListRoute *GetDepartureFrom(const std::string city);
     // Paramètre <city> : Chaîne de caractère contenant la ville de départ
     // Mode d'emploi :
     //      Cette méthode permet de récupérer une liste de tous les trajets qui partent de <city>
 
 
-    ListRoute *GetArrivalTo(const char *city);
+    ListRoute *GetArrivalTo(const std::string city);
     // Paramètre <arrival> : Chaîne de caractère contenant la ville d'arrivée
     // Mode d'emploi :
     //      Cette méthode permet de récupérer une liste de tous les trajets qui arrivent à <city>
@@ -82,13 +84,13 @@ class ListRoute
 
     //--------------------------------------- Méthodes protégées ou privées
 
-  protected:
-  private:
+protected:
+private:
 
     //--------------------------------------- Attributs et types protégés ou privés
 
-  protected:
-  private:
+protected:
+private:
     Route **routes; // Tableau contenant les routes
     size_t cardMax; // Taille du tableau
     unsigned int currentCard; // Nombre d'élements dans le tableau

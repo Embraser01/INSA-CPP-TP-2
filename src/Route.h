@@ -3,6 +3,7 @@
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
+#include <string>
 
 //------------------------------------------- Rôle de la classe
 // Rôle : Route a pour rôle
@@ -18,12 +19,12 @@ class Route
 
   public:
 
-    virtual char *GetDeparture() const = 0;
+    virtual std::string GetDeparture() const = 0;
     // Mode d'emploi :
     //      Cette méthode permet de récupérer la ville de départ
     //      Méthode virtuelle pure
 
-    virtual char *GetArrival() const = 0;
+    virtual std::string GetArrival() const = 0;
     // Mode d'emploi :
     //      Cette méthode permet de récupérer la ville d'arrivée
     //      Méthode virtuelle pure
