@@ -1,3 +1,7 @@
+#include <iostream>
+
+using namespace std;
+
 #include "Route.h"
 
 //------------------------------------------- Constantes, statiques et types privés

@@ -19,7 +19,7 @@ LDFLAGS =
 
 CXXFLAGS =  -Wall -pedantic --std=c++11
 ifdef DEBUG
-	CXXFLAGS := $(CXXFLAGS) -g
+	CXXFLAGS := $(CXXFLAGS) -DMAP -g
 endif
 
 DEPDIR = deps
