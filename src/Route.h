@@ -17,7 +17,7 @@ class Route
 {
 //--------------------------------------- Méthodes publiques
 
-  public:
+public:
 
     virtual std::string GetDeparture() const = 0;
     // Mode d'emploi :
@@ -35,6 +35,10 @@ class Route
     //      Méthode virtuelle pure
 
 
+    virtual bool IsComposed() const = 0;
+
+    bool PassBy(string departureCity, string arrivalCity);
+
     //--------------------------------------- Redéfinition d'opérateurs
 
     //--------------------------------------- Constructeurs - destructeur
@@ -45,13 +49,13 @@ class Route
 
 //--------------------------------------- Méthodes protégées ou privées
 
-  protected:
-  private:
+protected:
+private:
 
 //--------------------------------------- Attributs et types protégés ou privés
 
-  protected:
-  private:
+protected:
+private:
 
 };
 

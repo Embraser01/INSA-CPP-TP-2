@@ -11,10 +11,12 @@ using namespace std;
 #include "SimpleRoute.h"
 #include "ComposedRoute.h"
 
-const int BUFFER_SIZE = 1000;
 const int MAX_CONSOLE_LINES = 20;
 
-char buff[BUFFER_SIZE] = {'\0'}; // Variable globale
+const enum FILTER
+{
+    NONE, TYPE, PASS_BY, INDEX
+};
 
 
 //--------------------------------------- Méthodes utilitaires (helpers)
@@ -288,6 +290,122 @@ void searchRoute(Catalog *catalog, bool advance = false)
     cout << "#----------------------------------------------------------------------------------------------" << endl;
 
     typeToContinue();
+}
+
+FILTER getFilter(string &param1, string &param2)
+{
+    return NONE;
+
+}
+
+void loadFile(Catalog *catalog)
+// Paramètre <catalog> Catalogue ou ajouter les trajets charges
+// Mode d'emploi:
+// Demande a l'utilisateur le nom du fichier contenant le Catalogue
+{
+    clearConsole();
+    cout << "#----------------------------------------------------------------------------------------------" << endl
+         << "#\t Charger un catalogue " << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#----------------------------------------------------------------------------------------------" << endl
+         << "Saisisser le nom du fichier a charger : ";
+
+    string fileName;
+    getline(cin, fileName);
+
+    ifstream f;
+    f.open(fileName);
+
+    // TODO check if exists and readable
+
+    ListRoute *listRoute = new ListRoute(DEFAULT_LIST_SIZE, false);
+    Route *tmp;
+    string strRoute;
+
+    // Filter
+    string param1;
+    string param2;
+    FILTER filter = getFilter(param1, param2);
+    bool isValid = false;
+
+    while (!f.bad() && !f.eof())
+    {
+        getline(cin, strRoute);
+        tmp = getRoute(strRoute);
+
+        if (tmp != NULL)
+        {
+            switch (filter)
+            {
+                case NONE:
+                    isValid = true;
+                    break;
+                case TYPE:
+                    isValid = (tmp->IsComposed() && param1 == "Composed")
+                              || (!tmp->IsComposed() && param1 == "Simple");
+                    break;
+                case PASS_BY:
+                    isValid = tmp->PassBy(param1, param2);
+                    break;
+                case INDEX:
+                    isValid = true; // On gère l'index après
+                    break;
+                default:
+                    break;
+
+            }
+            if (isValid)
+            {
+                listRoute->AddRoute(tmp);
+            } else
+            {
+                delete tmp;
+            }
+        } else
+        {
+            cout << "Erreur lors du chargement d'une route, on l'ignore" << endl;
+        };
+    }
+
+    if (filter == INDEX)
+    { // Pour l'index on travaille sur la liste et non pas sur la route
+
+        int n = stoi(param1);
+        int m = stoi(param2);
+
+        ListRoute *filtered = listRoute->FilterSelect(n, m);
+
+        for (unsigned int i = 0; i < n; i++)
+        {
+            delete listRoute->GetElement(i);
+            // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
+        }
+
+        for (unsigned int i = m + 1; i < listRoute->GetSize(); i++)
+        {
+            delete listRoute->GetElement(i);
+            // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
+        }
+
+        delete listRoute;
+        listRoute = filtered;
+    }
+
+    // On ajoute les routes restantes au catalogue
+    for (unsigned int i = 0; i < listRoute->GetSize(); i++)
+    {
+        catalog->AddRoute(listRoute->GetElement(i));
+    }
+
+    delete listRoute;
 }
 
 
