@@ -42,6 +42,10 @@ public:
     //      Cette méthode ajoute une SimpleRoute à <routes> en vérifiant
     //      que la ville de départ de la nouvelle route correspond à la ville d'arrivée actuelle.
 
+    virtual void out(std::ostream& os) const;
+    //Paramètre <os> : le ostream ou nous allons écrire
+    //Mode d'emploi:
+    //      Cette méthode permet d'écrire sur la sortie fournie en paramètre
 
     //--------------------------------------- Redéfinition d'opérateurs
 

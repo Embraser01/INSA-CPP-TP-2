@@ -28,6 +28,10 @@ void SimpleRoute::Display() const
     cout << "De " << departure << " vers " << arrival << " en " << transport;
 }
 
+void SimpleRoute::out(std::ostream &os) const
+{
+    os<<transport<<"("<<departure<<","<<arrival<<")";
+}
 
 //------------------------------------------- Redefinition d'operateurs
 

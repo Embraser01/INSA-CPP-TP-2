@@ -13,6 +13,11 @@ using namespace std;
 //------------------------------------------- METHODES PUBLIC
 
 //------------------------------------------- Redefinition d'operateurs
+std::ostream & operator<<(std::ostream &os,const Route &r)
+{
+    r.out(os);
+    return os;
+}
 
 //------------------------------------------- Constructeurs - destructeur
 

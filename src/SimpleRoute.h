@@ -33,6 +33,11 @@ class SimpleRoute : public Route
     //      Cette méthode permet d'afficher sur la sortie standard le trajet sous la forme suivante
     //          Départ de <Ville de départ> pour <Ville d'arrivée> en <Moyen de transport>
 
+    virtual void out(std::ostream& os) const;
+    //Paramètre <os> : le ostream ou nous allons écrire
+    //Mode d'emploi:
+    //      Cette méthode permet d'écrire sur la sortie fournie en paramètre
+
 
     //--------------------------------------- Redéfinition d'opérateurs
 

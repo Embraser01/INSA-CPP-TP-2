@@ -52,6 +52,17 @@ bool ComposedRoute::AddSimpleRoute(const SimpleRoute *simpleRoute)
     return false;
 }
 
+void ComposedRoute::out(std::ostream &os) const
+{
+    for (unsigned int i = 0; i < routes->GetSize() - 1; ++i)
+    { // Jusqu'à l'avant dernier
+        routes->GetElement(i)->out(os);
+        os<< ";";
+    }
+
+    // On affiche le dernier
+    routes->GetElement(routes->GetSize() - 1)->out(os);
+}
 
 //------------------------------------------- Redefinition d'operateurs
 

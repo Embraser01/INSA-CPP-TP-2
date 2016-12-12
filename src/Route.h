@@ -13,6 +13,8 @@
 //       La classe est abstraite
 //-------------------------------------------
 
+#include <iosfwd>
+
 class Route
 {
 //--------------------------------------- Méthodes publiques
@@ -34,12 +36,19 @@ public:
     //      Cette méthode permet d'afficher sur la sortie standard le trajet
     //      Méthode virtuelle pure
 
+    virtual void out(std::ostream& os) const =0;
+    //Paramètre <os> : le ostream ou nous allons écrire
+    //Mode d'emploi:
+    //      Cette méthode permet d'écrire sur la sortie fournie en paramètre
+
 
     virtual bool IsComposed() const = 0;
 
     bool PassBy(string departureCity, string arrivalCity);
 
     //--------------------------------------- Redéfinition d'opérateurs
+
+    friend std::ostream & operator<< (std::ostream &os,const Route  &r);
 
     //--------------------------------------- Constructeurs - destructeur
 
