@@ -5,6 +5,7 @@
 
 #include "Route.h"
 
+#include <string>
 
 //------------------------------------------- Rôle de la classe
 // Rôle : SimpleRoute a pour rôle
@@ -19,11 +20,11 @@ class SimpleRoute : public Route
 
   public:
 
-    virtual char *GetDeparture() const;
+    virtual std::string GetDeparture() const;
     // Mode d'emploi :
     //      Cette méthode permet de récupérer la ville de départ
 
-    virtual char *GetArrival() const;
+    virtual std::string GetArrival() const;
     // Mode d'emploi :
     //      Cette méthode permet de récupérer la ville d'arrivée
 
@@ -42,9 +43,9 @@ class SimpleRoute : public Route
 
     //--------------------------------------- Constructeurs - destructeur
 
-    SimpleRoute(const char *departure,
-                const char *arrival,
-                const char *transport);
+    SimpleRoute(const std::string departure,
+                const std::string arrival,
+                const std::string transport);
     // Paramètre <departure> : Chaîne de caractère contenant la ville de départ
     // Paramètre <arrival> : Chaîne de caractère contenant la ville d'arrivée
     // Paramètre <transport> : Chaîne de caractère contenant le moyen de transport
@@ -66,9 +67,9 @@ class SimpleRoute : public Route
 
   protected:
   private:
-    char *departure; // Ville de départ
-    char *arrival; // Ville d'arrivée
-    char *transport; // Moyen de transport
+    std::string departure; // Ville de départ
+    std::string arrival; // Ville d'arrivée
+    std::string transport; // Moyen de transport
 };
 
 #endif //TP2_C_SIMPLEROUTE_H

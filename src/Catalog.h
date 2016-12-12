@@ -6,6 +6,7 @@
 #include "ListRoute.h"
 #include "Route.h"
 
+#include <string>
 
 //------------------------------------------- Rôle de la classe
 // Rôle : Catalog a pour rôle
@@ -24,7 +25,7 @@ class Catalog
     //      Cette méthode permet d'afficher sur la sortie standard les trajets présent dans le catalogue
 
 
-    void Query(const char *departureCity, const char *arrivalCity);
+    void Query(const std::string departureCity, const std::string arrivalCity);
     // Paramètre <departureCity> : Chaîne de caractère contenant la ville de départ
     // Paramètre <arrivalCity> : Chaîne de caractère contenant la ville d'arrivée
     // Mode d'emploi :
@@ -32,7 +33,7 @@ class Catalog
     //      aux critères de recherche <departureCity> et <arrivalCity>
 
 
-    void AdvanceQuery(const char *departureCity, const char *arrivalCity);
+    void AdvanceQuery(const std::string departureCity, const std::string arrivalCity);
     // Paramètre <departureCity> : Chaîne de caractère contenant la ville de départ
     // Paramètre <arrivalCity> : Chaîne de caractère contenant la ville d'arrivée
     // Mode d'emploi :
@@ -65,7 +66,7 @@ class Catalog
 
   protected:
   private:
-    void display(ListRoute *listRoute, const char *departureCity, const char *arrivalCity);
+    void display(ListRoute *listRoute, const std::string departureCity, const std::string arrivalCity);
     // Paramètre <listRoute> : ListeRoute à afficher
     // Paramètre <departureCity> : Chaîne de caractère contenant la ville de départ (dans le cas d'une recherche)
     // Paramètre <arrivalCity> : Chaîne de caractère contenant la ville d'arrivée (dans le cas d'une recherche)
