@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -11,12 +12,10 @@ using namespace std;
 #include "SimpleRoute.h"
 #include "ComposedRoute.h"
 
+const int BUFFER_SIZE = 1000;
 const int MAX_CONSOLE_LINES = 20;
 
-const enum FILTER
-{
-    NONE, TYPE, PASS_BY, INDEX
-};
+char buff[BUFFER_SIZE] = {'\0'}; // Variable globale
 
 
 //--------------------------------------- Méthodes utilitaires (helpers)
@@ -292,20 +291,15 @@ void searchRoute(Catalog *catalog, bool advance = false)
     typeToContinue();
 }
 
-FILTER getFilter(string &param1, string &param2)
+void save(Catalog * catalog)
 {
-    return NONE;
-
-}
-
-void loadFile(Catalog *catalog)
-// Paramètre <catalog> Catalogue ou ajouter les trajets charges
-// Mode d'emploi:
-// Demande a l'utilisateur le nom du fichier contenant le Catalogue
-{
+    //Paramètre <catalog> Catalogue a enregistrer
+    //Mode d'emploi:
+    //Demande a l'utilisateur le nom du fichier a creer a partir du catalogue
     clearConsole();
+
     cout << "#----------------------------------------------------------------------------------------------" << endl
-         << "#\t Charger un catalogue " << endl
+         << "#\t Sauvegarder un catalogue " << endl
          << "#\t" << endl
          << "#\t" << endl
          << "#\t" << endl
@@ -316,98 +310,28 @@ void loadFile(Catalog *catalog)
          << "#\t" << endl
          << "#\t" << endl
          << "#----------------------------------------------------------------------------------------------" << endl
-         << "Saisisser le nom du fichier a charger : ";
+         << "Saisisser le nom du fichier a creer : ";
 
-    string fileName;
-    getline(cin, fileName);
+    cin.getline(buff, BUFFER_SIZE);
 
-    ifstream f;
-    f.open(fileName);
+    ofstream f;
+    f.open(buff);
 
-    // TODO check if exists and readable
+    //verifier si le fichier est deja existant
 
-    ListRoute *listRoute = new ListRoute(DEFAULT_LIST_SIZE, false);
-    Route *tmp;
-    string strRoute;
+    //recuperer la liste depuis le catalogue
+    const ListRoute * selection = catalog->getRoutes();
 
-    // Filter
-    string param1;
-    string param2;
-    FILTER filter = getFilter(param1, param2);
-    bool isValid = false;
+    //filter before writing
 
-    while (!f.bad() && !f.eof())
+    for(size_t i = 0;i < selection->GetSize();i++)
     {
-        getline(cin, strRoute);
-        tmp = getRoute(strRoute);
-
-        if (tmp != NULL)
-        {
-            switch (filter)
-            {
-                case NONE:
-                    isValid = true;
-                    break;
-                case TYPE:
-                    isValid = (tmp->IsComposed() && param1 == "Composed")
-                              || (!tmp->IsComposed() && param1 == "Simple");
-                    break;
-                case PASS_BY:
-                    isValid = tmp->PassBy(param1, param2);
-                    break;
-                case INDEX:
-                    isValid = true; // On gère l'index après
-                    break;
-                default:
-                    break;
-
-            }
-            if (isValid)
-            {
-                listRoute->AddRoute(tmp);
-            } else
-            {
-                delete tmp;
-            }
-        } else
-        {
-            cout << "Erreur lors du chargement d'une route, on l'ignore" << endl;
-        };
+        Route * current = selection->GetElement(i);
+        f<<*current<<endl;
     }
 
-    if (filter == INDEX)
-    { // Pour l'index on travaille sur la liste et non pas sur la route
 
-        int n = stoi(param1);
-        int m = stoi(param2);
-
-        ListRoute *filtered = listRoute->FilterSelect(n, m);
-
-        for (unsigned int i = 0; i < n; i++)
-        {
-            delete listRoute->GetElement(i);
-            // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
-        }
-
-        for (unsigned int i = m + 1; i < listRoute->GetSize(); i++)
-        {
-            delete listRoute->GetElement(i);
-            // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
-        }
-
-        delete listRoute;
-        listRoute = filtered;
-    }
-
-    // On ajoute les routes restantes au catalogue
-    for (unsigned int i = 0; i < listRoute->GetSize(); i++)
-    {
-        catalog->AddRoute(listRoute->GetElement(i));
-    }
-
-    delete listRoute;
 }
-
 
 void about()
 // Mode d'emploi :
@@ -479,6 +403,9 @@ int main()
                     break;
                 case '4':
                     searchRoute(catalog, true);
+                    break;
+                case 's':
+                    save(catalog);
                     break;
                 case 'a':
                     about();

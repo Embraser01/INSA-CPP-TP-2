@@ -49,6 +49,10 @@ class Catalog
     // Mode d'emploi :
     //      Cette méthode ajoute <route> à la liste
 
+    const ListRoute * getRoutes();
+    // Mode d'emploi :
+    //      Cette methode nous permet d'acceder a une liste de trajets depuis l'exterieur
+
 
     //--------------------------------------- Redéfinition d'opérateurs
 

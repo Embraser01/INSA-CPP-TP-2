@@ -201,6 +201,10 @@ void Catalog::AddRoute(const Route *route)
     routes->AddRoute(route);
 }
 
+const ListRoute * Catalog::getRoutes()
+{
+    return routes;
+}
 
 //------------------------------------------- Redefinition d'operateurs
 
