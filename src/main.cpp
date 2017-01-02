@@ -1,9 +1,8 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <sstream>
 #include <vector>
-
-using namespace std;
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
@@ -11,9 +10,12 @@ using namespace std;
 #include "SimpleRoute.h"
 #include "ComposedRoute.h"
 
+using namespace std;
+
+
 const int MAX_CONSOLE_LINES = 20;
 
-const enum FILTER
+enum FILTER
 {
     NONE, TYPE, PASS_BY, INDEX
 };
@@ -59,7 +61,7 @@ string trim(const string &str)
 
 // From : http://stackoverflow.com/a/236803/5285167
 
-void split(const string &s, char delim, vector <string> &elems)
+void split(const string &s, char delim, vector<string> &elems)
 {
     stringstream ss;
     ss.str(s);
@@ -71,9 +73,9 @@ void split(const string &s, char delim, vector <string> &elems)
 }
 
 
-vector <string> split(const string &s, char delim)
+vector<string> split(const string &s, char delim)
 {
-    vector <string> elems;
+    vector<string> elems;
     split(s, delim, elems);
     return elems;
 }
@@ -124,7 +126,7 @@ SimpleRoute *getSimpleRoute(string str)
 Route *getRoute(const string str)
 {
 
-    vector <string> routes = split(str, ';');
+    vector<string> routes = split(str, ';');
     if (routes.size() == 0)
     {
         return NULL;
@@ -292,11 +294,13 @@ void searchRoute(Catalog *catalog, bool advance = false)
     typeToContinue();
 }
 
+
 FILTER getFilter(string &param1, string &param2)
 {
+    // TODO Faire l'interface qui permet de selectionner les filtres (pour le chargement et l'enregistrement) et enregistrer les valeurs des paramètres dans param1 & param2 si necessaire
     return NONE;
-
 }
+
 
 void loadFile(Catalog *catalog)
 // Paramètre <catalog> Catalogue ou ajouter les trajets charges
@@ -329,6 +333,7 @@ void loadFile(Catalog *catalog)
     ListRoute *listRoute = new ListRoute(DEFAULT_LIST_SIZE, false);
     Route *tmp;
     string strRoute;
+
 
     // Filter
     string param1;
@@ -389,7 +394,7 @@ void loadFile(Catalog *catalog)
             // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
         }
 
-        for (unsigned int i = m + 1; i < listRoute->GetSize(); i++)
+        for (unsigned int i = (unsigned int) (m + 1); i < listRoute->GetSize(); i++)
         {
             delete listRoute->GetElement(i);
             // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
@@ -452,8 +457,8 @@ int main()
              << "#\t" << "\t2. Consulter le catalogue" << endl
              << "#\t" << "\t3. Rechercher un parcours (simple)" << endl
              << "#\t" << "\t4. Rechercher un parcours (avancée)" << endl
-             << "#\t" << endl
-             << "#\t" << endl
+             << "#\t" << "\t5. Charger les données depuis un fichier" << endl
+             << "#\t" << "\t6. Sauvegarder les données dans un fichier" << endl
              << "#\t" << endl
              << "#\t" << "\ta. A propos" << endl
              << "#\t" << "\tq. Quitter l'application" << endl
@@ -479,6 +484,12 @@ int main()
                     break;
                 case '4':
                     searchRoute(catalog, true);
+                    break;
+                case '5':
+                    loadFile(catalog);
+                    break;
+                case '6':
+                    // TODO Sauvegarder (dans catalog ou dans le main ?)
                     break;
                 case 'a':
                     about();

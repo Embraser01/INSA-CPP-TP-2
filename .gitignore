@@ -85,3 +85,5 @@ fabric.properties
 .idea/misc.xml
 .idea/modules.xml
 cmake-build-debug
+.idea/.name
+obj/

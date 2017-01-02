@@ -18,7 +18,7 @@ class Catalog
 {
 //--------------------------------------- Méthodes publiques
 
-  public:
+public:
 
     void Display();
     // Mode d'emploi :
@@ -64,8 +64,8 @@ class Catalog
 
 //--------------------------------------- Méthodes protégées ou privées
 
-  protected:
-  private:
+protected:
+private:
     void display(ListRoute *listRoute, const std::string departureCity, const std::string arrivalCity);
     // Paramètre <listRoute> : ListeRoute à afficher
     // Paramètre <departureCity> : Chaîne de caractère contenant la ville de départ (dans le cas d'une recherche)
@@ -83,8 +83,8 @@ class Catalog
 
 //--------------------------------------- Attributs et types protégés ou privés
 
-  protected:
-  private:
+protected:
+private:
     ListRoute *routes; // Liste des trajets existants
 
     // Pour AdvanceQuery() (recherche advancée)

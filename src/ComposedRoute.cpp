@@ -57,7 +57,7 @@ void ComposedRoute::out(std::ostream &os) const
     for (unsigned int i = 0; i < routes->GetSize() - 1; ++i)
     { // Jusqu'à l'avant dernier
         routes->GetElement(i)->out(os);
-        os<< ";";
+        os << ";";
     }
 
     // On affiche le dernier
@@ -85,4 +85,9 @@ ComposedRoute::~ComposedRoute()
 #ifdef MAP
     cout << "Appel au destructeur de <ComposedRoute>" << endl;
 #endif
+}
+
+bool ComposedRoute::IsComposed() const
+{
+    return true;
 }
