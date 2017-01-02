@@ -12,6 +12,12 @@ using namespace std;
 
 //------------------------------------------- METHODES PUBLIC
 
+bool Route::PassBy(string departureCity, string arrivalCity)
+{
+
+    return false;
+}
+
 //------------------------------------------- Redefinition d'operateurs
 std::ostream & operator<<(std::ostream &os,const Route &r)
 {
@@ -27,3 +33,5 @@ Route::~Route()
     cout << "Appel au destructeur de <Route>" << endl;
 #endif
 }
+
+

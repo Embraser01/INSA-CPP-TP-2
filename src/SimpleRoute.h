@@ -39,6 +39,8 @@ class SimpleRoute : public Route
     //      Cette méthode permet d'écrire sur la sortie fournie en paramètre
 
 
+    virtual bool IsComposed() const;
+
     //--------------------------------------- Redéfinition d'opérateurs
 
     //--------------------------------------- Constructeurs - destructeur

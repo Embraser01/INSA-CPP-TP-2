@@ -1,10 +1,8 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <sstream>
 #include <vector>
-#include <fstream>
-
-using namespace std;
 
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
@@ -12,10 +10,15 @@ using namespace std;
 #include "SimpleRoute.h"
 #include "ComposedRoute.h"
 
-const int BUFFER_SIZE = 1000;
+using namespace std;
+
+
 const int MAX_CONSOLE_LINES = 20;
 
-char buff[BUFFER_SIZE] = {'\0'}; // Variable globale
+enum FILTER
+{
+    NONE, TYPE, PASS_BY, INDEX
+};
 
 
 //--------------------------------------- Méthodes utilitaires (helpers)
@@ -58,7 +61,7 @@ string trim(const string &str)
 
 // From : http://stackoverflow.com/a/236803/5285167
 
-void split(const string &s, char delim, vector <string> &elems)
+void split(const string &s, char delim, vector<string> &elems)
 {
     stringstream ss;
     ss.str(s);
@@ -70,9 +73,9 @@ void split(const string &s, char delim, vector <string> &elems)
 }
 
 
-vector <string> split(const string &s, char delim)
+vector<string> split(const string &s, char delim)
 {
-    vector <string> elems;
+    vector<string> elems;
     split(s, delim, elems);
     return elems;
 }
@@ -123,7 +126,7 @@ SimpleRoute *getSimpleRoute(string str)
 Route *getRoute(const string str)
 {
 
-    vector <string> routes = split(str, ';');
+    vector<string> routes = split(str, ';');
     if (routes.size() == 0)
     {
         return NULL;
@@ -291,15 +294,22 @@ void searchRoute(Catalog *catalog, bool advance = false)
     typeToContinue();
 }
 
-void save(Catalog * catalog)
-{
-    //Paramètre <catalog> Catalogue a enregistrer
-    //Mode d'emploi:
-    //Demande a l'utilisateur le nom du fichier a creer a partir du catalogue
-    clearConsole();
 
+FILTER getFilter(string &param1, string &param2)
+{
+    // TODO Faire l'interface qui permet de selectionner les filtres (pour le chargement et l'enregistrement) et enregistrer les valeurs des paramètres dans param1 & param2 si necessaire
+    return NONE;
+}
+
+
+void loadFile(Catalog *catalog)
+// Paramètre <catalog> Catalogue ou ajouter les trajets charges
+// Mode d'emploi:
+// Demande a l'utilisateur le nom du fichier contenant le Catalogue
+{
+    clearConsole();
     cout << "#----------------------------------------------------------------------------------------------" << endl
-         << "#\t Sauvegarder un catalogue " << endl
+         << "#\t Charger un catalogue " << endl
          << "#\t" << endl
          << "#\t" << endl
          << "#\t" << endl
@@ -310,28 +320,99 @@ void save(Catalog * catalog)
          << "#\t" << endl
          << "#\t" << endl
          << "#----------------------------------------------------------------------------------------------" << endl
-         << "Saisisser le nom du fichier a creer : ";
+         << "Saisisser le nom du fichier a charger : ";
 
-    cin.getline(buff, BUFFER_SIZE);
+    string fileName;
+    getline(cin, fileName);
 
-    ofstream f;
-    f.open(buff);
+    ifstream f;
+    f.open(fileName);
 
-    //verifier si le fichier est deja existant
+    // TODO check if exists and readable
 
-    //recuperer la liste depuis le catalogue
-    const ListRoute * selection = catalog->getRoutes();
+    ListRoute *listRoute = new ListRoute(DEFAULT_LIST_SIZE, false);
+    Route *tmp;
+    string strRoute;
 
-    //filter before writing
 
-    for(size_t i = 0;i < selection->GetSize();i++)
+    // Filter
+    string param1;
+    string param2;
+    FILTER filter = getFilter(param1, param2);
+    bool isValid = false;
+
+    while (!f.bad() && !f.eof())
     {
-        Route * current = selection->GetElement(i);
-        f<<*current<<endl;
+        getline(cin, strRoute);
+        tmp = getRoute(strRoute);
+
+        if (tmp != NULL)
+        {
+            switch (filter)
+            {
+                case NONE:
+                    isValid = true;
+                    break;
+                case TYPE:
+                    isValid = (tmp->IsComposed() && param1 == "Composed")
+                              || (!tmp->IsComposed() && param1 == "Simple");
+                    break;
+                case PASS_BY:
+                    isValid = tmp->PassBy(param1, param2);
+                    break;
+                case INDEX:
+                    isValid = true; // On gère l'index après
+                    break;
+                default:
+                    break;
+
+            }
+            if (isValid)
+            {
+                listRoute->AddRoute(tmp);
+            } else
+            {
+                delete tmp;
+            }
+        } else
+        {
+            cout << "Erreur lors du chargement d'une route, on l'ignore" << endl;
+        };
     }
 
+    if (filter == INDEX)
+    { // Pour l'index on travaille sur la liste et non pas sur la route
 
+        int n = stoi(param1);
+        int m = stoi(param2);
+
+        ListRoute *filtered = listRoute->FilterSelect(n, m);
+
+        for (unsigned int i = 0; i < n; i++)
+        {
+            delete listRoute->GetElement(i);
+            // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
+        }
+
+        for (unsigned int i = (unsigned int) (m + 1); i < listRoute->GetSize(); i++)
+        {
+            delete listRoute->GetElement(i);
+            // ON l'enlève pas du tableau listRoute car on va la supprimer juste après
+        }
+
+        delete listRoute;
+        listRoute = filtered;
+    }
+
+    // On ajoute les routes restantes au catalogue
+    for (unsigned int i = 0; i < listRoute->GetSize(); i++)
+    {
+        catalog->AddRoute(listRoute->GetElement(i));
+    }
+
+    delete listRoute;
 }
+
 
 void about()
 // Mode d'emploi :
@@ -376,8 +457,8 @@ int main()
              << "#\t" << "\t2. Consulter le catalogue" << endl
              << "#\t" << "\t3. Rechercher un parcours (simple)" << endl
              << "#\t" << "\t4. Rechercher un parcours (avancée)" << endl
-             << "#\t" << endl
-             << "#\t" << endl
+             << "#\t" << "\t5. Charger les données depuis un fichier" << endl
+             << "#\t" << "\t6. Sauvegarder les données dans un fichier" << endl
              << "#\t" << endl
              << "#\t" << "\ta. A propos" << endl
              << "#\t" << "\tq. Quitter l'application" << endl
@@ -404,8 +485,11 @@ int main()
                 case '4':
                     searchRoute(catalog, true);
                     break;
-                case 's':
-                    save(catalog);
+                case '5':
+                    loadFile(catalog);
+                    break;
+                case '6':
+                    // TODO Sauvegarder (dans catalog ou dans le main ?)
                     break;
                 case 'a':
                     about();

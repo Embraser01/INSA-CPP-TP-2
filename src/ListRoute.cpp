@@ -129,6 +129,12 @@ bool ListRoute::Has(Route *route)
 }
 
 
+ListRoute *ListRoute::FilterSelect(int n, int m)
+{
+    // TODO Renvoyer la liste entre n et m (check if n > m cf. mail )
+    return nullptr;
+}
+
 //------------------------------------------- Redefinition d'operateurs
 
 //------------------------------------------- Constructeurs - destructeur
@@ -163,4 +169,6 @@ ListRoute::~ListRoute()
     cout << "Appel au destructeur de <ListRoute>" << endl;
 #endif
 }
+
+
 

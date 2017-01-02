@@ -67,6 +67,9 @@ public:
     //      est présente dans la liste, false sinon
 
 
+
+    ListRoute *FilterSelect(int n, int m);
+
     //--------------------------------------- Redéfinition d'opérateurs
 
 
@@ -83,6 +86,7 @@ public:
     // Destructeur
 
     //--------------------------------------- Méthodes protégées ou privées
+
 
 protected:
 private:

@@ -4,6 +4,7 @@
 //------------------------------------------- Interfaces utilisées, Types, Constantes
 
 #include <string>
+#include <iosfwd>
 
 //------------------------------------------- Rôle de la classe
 // Rôle : Route a pour rôle
@@ -13,7 +14,6 @@
 //       La classe est abstraite
 //-------------------------------------------
 
-#include <iosfwd>
 
 class Route
 {
@@ -36,7 +36,7 @@ public:
     //      Cette méthode permet d'afficher sur la sortie standard le trajet
     //      Méthode virtuelle pure
 
-    virtual void out(std::ostream& os) const =0;
+    virtual void out(std::ostream &os) const =0;
     //Paramètre <os> : le ostream ou nous allons écrire
     //Mode d'emploi:
     //      Cette méthode permet d'écrire sur la sortie fournie en paramètre
@@ -44,11 +44,12 @@ public:
 
     virtual bool IsComposed() const = 0;
 
-    bool PassBy(string departureCity, string arrivalCity);
+
+    bool PassBy(std::string departureCity, std::string arrivalCity);
 
     //--------------------------------------- Redéfinition d'opérateurs
 
-    friend std::ostream & operator<< (std::ostream &os,const Route  &r);
+    friend std::ostream &operator<<(std::ostream &os, const Route &r);
 
     //--------------------------------------- Constructeurs - destructeur
 

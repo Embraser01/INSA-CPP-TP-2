@@ -58,3 +58,8 @@ SimpleRoute::~SimpleRoute()
     cout << "Appel au destructeur de <SimpleRoute>" << endl;
 #endif
 }
+
+bool SimpleRoute::IsComposed() const
+{
+    return false;
+}
