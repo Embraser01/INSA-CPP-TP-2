@@ -405,7 +405,7 @@ void loadFile(Catalog *catalog)
 
     while (f.good() && !f.eof())
     {
-        getline(cin, strRoute);
+        getline(f, strRoute);
         tmp = getRoute(strRoute);
         lineNumber++;
 
@@ -518,6 +518,8 @@ void loadFile(Catalog *catalog)
     }
 
     f.close();
+    cout << "Le fichier a bien été importé, nombre de lignes : " << lineNumber << endl;
+    typeToContinue();
     delete listRoute;
 }
 
@@ -632,12 +634,14 @@ void saveCatalog(Catalog *catalog)
         }
         if (isValid)
         {
-            f << tmp << endl;
+            f << (*tmp) << endl;
             lineNumber++;
         }
     }
 
     f.close();
+    cout << "Le fichier a bien été exporté, nombre de lignes : " << lineNumber << endl;
+    typeToContinue();
     if (filter == INDEX)
     { // On supprime que dans l'INDEX car on crée une autre à liste
         delete listRoute;
