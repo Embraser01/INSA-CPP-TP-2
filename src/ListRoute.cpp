@@ -131,11 +131,11 @@ bool ListRoute::Has(Route *route)
 
 ListRoute *ListRoute::FilterSelect(int n, int m)
 {
-    if (n>m){
+    if (n>m||n<0){
         return nullptr;
     }
     ListRoute *Filter= new ListRoute(DEFAULT_LIST_SIZE, false);
-    for (int i=n;i<m;i++){
+    for (unsigned int i=(unsigned int)n;i<m;i++){
         Filter->AddRoute(this->GetElement(i));
     }
     return Filter;
