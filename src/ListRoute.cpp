@@ -132,7 +132,7 @@ bool ListRoute::Has(Route *route)
 ListRoute *ListRoute::FilterSelect(int n, int m)
 {
     if (n>m||n<0){
-        return nullptr;
+        return nullptr ;
     }
     ListRoute *Filter= new ListRoute(DEFAULT_LIST_SIZE, false);
     for (unsigned int i=(unsigned int)n;i<m;i++){
