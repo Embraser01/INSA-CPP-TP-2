@@ -131,14 +131,17 @@ bool ListRoute::Has(Route *route)
 
 ListRoute *ListRoute::FilterSelect(int n, int m)
 {
-    if (n>m||n<0){
-        return nullptr ;
+    if (n > m || n < 0 || m > currentCard)
+    {
+        return NULL;
     }
-    ListRoute *Filter= new ListRoute(DEFAULT_LIST_SIZE, false);
-    for (unsigned int i=(unsigned int)n;i<m;i++){
-        Filter->AddRoute(this->GetElement(i));
+    ListRoute *filter = new ListRoute((size_t) (m - n), false);
+
+    for (unsigned int i = (unsigned int) n; i < m; i++)
+    {
+        filter->AddRoute(routes[i]);
     }
-    return Filter;
+    return filter;
 }
 
 //------------------------------------------- Redefinition d'operateurs

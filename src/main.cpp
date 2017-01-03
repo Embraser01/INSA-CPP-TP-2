@@ -388,6 +388,8 @@ void loadFile(Catalog *catalog)
 
         ListRoute *filtered = listRoute->FilterSelect(n, m);
 
+        // TODO Check if NULL or NOT
+
         for (unsigned int i = 0; i < n; i++)
         {
             delete listRoute->GetElement(i);
