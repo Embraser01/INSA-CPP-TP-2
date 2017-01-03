@@ -50,6 +50,11 @@ public:
     //      Cette méthode ajoute <route> à la liste
 
 
+    ListRoute* GetListRoute();
+    // Mode d'emploi :
+    //      Cette méthode renvoie la liste de route
+
+
     //--------------------------------------- Redéfinition d'opérateurs
 
     //--------------------------------------- Constructeurs - destructeur

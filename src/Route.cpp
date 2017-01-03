@@ -14,12 +14,13 @@ using namespace std;
 
 bool Route::PassBy(string departureCity, string arrivalCity)
 {
-
-    return false;
+    return !(!departureCity.empty() && departureCity != this->GetDeparture()
+             || !arrivalCity.empty() && arrivalCity != this->GetArrival());
 }
 
 //------------------------------------------- Redefinition d'operateurs
-std::ostream & operator<<(std::ostream &os,const Route &r)
+
+std::ostream &operator<<(std::ostream &os, const Route &r)
 {
     r.out(os);
     return os;
