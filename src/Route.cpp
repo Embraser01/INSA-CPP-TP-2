@@ -14,8 +14,8 @@ using namespace std;
 
 bool Route::PassBy(string departureCity, string arrivalCity)
 {
-    return !(!departureCity.empty() && departureCity != this->GetDeparture()
-             || !arrivalCity.empty() && arrivalCity != this->GetArrival());
+    return !((!departureCity.empty() && departureCity != this->GetDeparture())
+             || (!arrivalCity.empty() && arrivalCity != this->GetArrival()));
 }
 
 //------------------------------------------- Redefinition d'operateurs
