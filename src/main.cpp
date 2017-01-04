@@ -321,7 +321,7 @@ FILTER getFilter(string &param1, string &param2)
             case '2':
                 filter = TYPE;
                 cout << "Type de trajet (" << SIMPLE_WORD << " ou " << COMPOSED_WORD << " ( " << SIMPLE_WORD
-                     << " par défaut) :" << endl;
+                     << " par défaut)) :" << endl;
                 getline(cin, param1);
 
                 if (param1 != SIMPLE_WORD && param1 != COMPOSED_WORD)
@@ -382,7 +382,7 @@ void loadFile(Catalog *catalog)
 
     // On vérifie que le fichier existe et est lisible
 
-    if (f.bad())
+    if (f.fail())
     {
         cout << "Erreur, impossible d'ouvrir le fichier" << endl;
         typeToContinue();
@@ -406,6 +406,12 @@ void loadFile(Catalog *catalog)
     while (f.good() && !f.eof())
     {
         getline(f, strRoute);
+
+        if (strRoute.empty())
+        { // Si la ligne est vide on l'ignore
+            continue;
+        }
+
         tmp = getRoute(strRoute);
         lineNumber++;
 
@@ -518,7 +524,7 @@ void loadFile(Catalog *catalog)
     }
 
     f.close();
-    cout << "Le fichier a bien été importé, nombre de lignes : " << lineNumber << endl;
+    cout << "Le fichier a bien été importé, nombre de lignes ajoutées : " << listRoute->GetSize() << endl;
     typeToContinue();
     delete listRoute;
 }
