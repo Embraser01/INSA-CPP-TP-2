@@ -131,8 +131,17 @@ bool ListRoute::Has(Route *route)
 
 ListRoute *ListRoute::FilterSelect(int n, int m)
 {
-    // TODO Renvoyer la liste entre n et m (check if n > m cf. mail )
-    return nullptr;
+    if (n > m || n < 0 || m > currentCard)
+    {
+        return NULL;
+    }
+    ListRoute *filter = new ListRoute((size_t) (m - n), false);
+
+    for (unsigned int i = (unsigned int) n; i < m; i++)
+    {
+        filter->AddRoute(routes[i]);
+    }
+    return filter;
 }
 
 //------------------------------------------- Redefinition d'operateurs

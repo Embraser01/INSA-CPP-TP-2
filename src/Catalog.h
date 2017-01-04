@@ -54,6 +54,11 @@ public:
     //      Cette methode nous permet d'acceder a une liste de trajets depuis l'exterieur
 
 
+    ListRoute* GetListRoute();
+    // Mode d'emploi :
+    //      Cette méthode renvoie la liste de route
+
+
     //--------------------------------------- Redéfinition d'opérateurs
 
     //--------------------------------------- Constructeurs - destructeur

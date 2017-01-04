@@ -227,3 +227,8 @@ Catalog::~Catalog()
     cout << "Appel au destructeur de <Catalog>" << endl;
 #endif
 }
+
+ListRoute *Catalog::GetListRoute()
+{
+    return routes;
+}

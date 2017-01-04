@@ -14,6 +14,8 @@ using namespace std;
 
 
 const int MAX_CONSOLE_LINES = 20;
+const string COMPOSED_WORD = "Composé";
+const string SIMPLE_WORD = "Simple";
 
 enum FILTER
 {
@@ -296,9 +298,58 @@ void searchRoute(Catalog *catalog, bool advance = false)
 
 
 FILTER getFilter(string &param1, string &param2)
+// Paramètre <param1> String passé par référence permettant de donner des infos en plus
+// Paramètre <param2> String passé par référence permettant de donner des infos en plus
+// Mode d'emploi:
+// Demande a l'utilisateur le filtre qu'il veut utiliser et des informations necessaires pour les filtres
 {
-    // TODO Faire l'interface qui permet de selectionner les filtres (pour le chargement et l'enregistrement) et enregistrer les valeurs des paramètres dans param1 & param2 si necessaire
-    return NONE;
+    string choice;
+    FILTER filter = NONE;
+    cout
+            << "Quel type de filtre voulez-vous utiliser : 1. Aucun  2. Type du trajet  3. Ville de départ/d'arrivée 4. Selection (défaut : 1.)"
+            << endl;
+
+    getline(cin, choice);
+
+    if (choice.size() == 1)
+    {
+        switch (choice[0])
+        {
+            case '1':
+                // Par defaut à NONE
+                break;
+            case '2':
+                filter = TYPE;
+                cout << "Type de trajet (" << SIMPLE_WORD << " ou " << COMPOSED_WORD << " ( " << SIMPLE_WORD
+                     << " par défaut)) :" << endl;
+                getline(cin, param1);
+
+                if (param1 != SIMPLE_WORD && param1 != COMPOSED_WORD)
+                { // Par defaut
+                    param1 = SIMPLE_WORD;
+                }
+                break;
+            case '3':
+                filter = PASS_BY;
+                cout << "Ville de départ (laisser vide pour ignorer) :" << endl;
+                getline(cin, param1);
+                cout << "Ville d'arrivée (laisser vide pour ignorer) :" << endl;
+                getline(cin, param2);
+                break;
+            case '4':
+                filter = INDEX;
+                cout << "Indice de départ :" << endl;
+                getline(cin, param1);
+                cout << "Indice d'arrivé :" << endl;
+                getline(cin, param2);
+                break;
+            default:
+                cout << "Erreur lors de la saisie ! Aucun filtre ne sera utilisé" << endl;
+                // Par defaut à NONE
+                break;
+        }
+    }
+    return filter;
 }
 
 
@@ -328,7 +379,17 @@ void loadFile(Catalog *catalog)
     ifstream f;
     f.open(fileName);
 
-    // TODO check if exists and readable
+
+    // On vérifie que le fichier existe et est lisible
+
+    if (f.fail())
+    {
+        cout << "Erreur, impossible d'ouvrir le fichier" << endl;
+        typeToContinue();
+        return;
+    }
+
+    // On prépare pour l'import des données
 
     ListRoute *listRoute = new ListRoute(DEFAULT_LIST_SIZE, false);
     Route *tmp;
@@ -340,11 +401,19 @@ void loadFile(Catalog *catalog)
     string param2;
     FILTER filter = getFilter(param1, param2);
     bool isValid = false;
+    unsigned int lineNumber = 0;
 
-    while (!f.bad() && !f.eof())
+    while (f.good() && !f.eof())
     {
-        getline(cin, strRoute);
+        getline(f, strRoute);
+
+        if (strRoute.empty())
+        { // Si la ligne est vide on l'ignore
+            continue;
+        }
+
         tmp = getRoute(strRoute);
+        lineNumber++;
 
         if (tmp != NULL)
         {
@@ -354,8 +423,8 @@ void loadFile(Catalog *catalog)
                     isValid = true;
                     break;
                 case TYPE:
-                    isValid = (tmp->IsComposed() && param1 == "Composed")
-                              || (!tmp->IsComposed() && param1 == "Simple");
+                    isValid = (tmp->IsComposed() && param1 == COMPOSED_WORD)
+                              || (!tmp->IsComposed() && param1 == SIMPLE_WORD);
                     break;
                 case PASS_BY:
                     isValid = tmp->PassBy(param1, param2);
@@ -365,7 +434,6 @@ void loadFile(Catalog *catalog)
                     break;
                 default:
                     break;
-
             }
             if (isValid)
             {
@@ -376,17 +444,60 @@ void loadFile(Catalog *catalog)
             }
         } else
         {
-            cout << "Erreur lors du chargement d'une route, on l'ignore" << endl;
-        };
+            cout << "Erreur lors du chargement de la ligne " << lineNumber << ", on l'ignore" << endl;
+        }
     }
 
-    if (filter == INDEX)
-    { // Pour l'index on travaille sur la liste et non pas sur la route
+    // Pour l'index on travaille sur la liste et non pas sur la route
 
-        int n = stoi(param1);
-        int m = stoi(param2);
+    if (filter == INDEX)
+    {
+        int n;
+        int m;
+
+        try
+        {
+            n = stoi(param1);
+            m = stoi(param2);
+        } catch (exception &e)
+        { // On récupère les deux exception (outrange & invalid argument)
+            cout << "Erreur, un des nombres rentrés sont invalides !" << endl;
+            typeToContinue();
+
+            // On vide la mémoire
+            for (unsigned int i = 0; i < listRoute->GetSize(); i++)
+            {
+                delete listRoute->GetElement(i);
+            }
+
+            delete listRoute;
+            f.close();
+            return;
+        }
+
 
         ListRoute *filtered = listRoute->FilterSelect(n, m);
+
+        if (filtered == NULL)
+        {
+            cout << "Erreur, l'intervalle de la selection est incorrecte (nombre de trajet du fichier : "
+                 << listRoute->GetSize() << " )" << endl;
+            typeToContinue();
+
+
+            // On vide la mémoire
+
+            for (unsigned int i = 0; i < listRoute->GetSize(); i++)
+            {
+                delete listRoute->GetElement(i);
+            }
+
+            delete listRoute;
+            f.close();
+            return;
+        }
+
+        // On supprime les routes qui sont filtrées (avant et après)
 
         for (unsigned int i = 0; i < n; i++)
         {
@@ -404,13 +515,143 @@ void loadFile(Catalog *catalog)
         listRoute = filtered;
     }
 
+
     // On ajoute les routes restantes au catalogue
+
     for (unsigned int i = 0; i < listRoute->GetSize(); i++)
     {
         catalog->AddRoute(listRoute->GetElement(i));
     }
 
+    f.close();
+    cout << "Le fichier a bien été importé, nombre de lignes ajoutées : " << listRoute->GetSize() << endl;
+    typeToContinue();
     delete listRoute;
+}
+
+
+void saveCatalog(Catalog *catalog)
+// Paramètre <catalog> Catalogue ou ajouter les trajets charges
+// Mode d'emploi:
+// Demande a l'utilisateur le nom du fichier contenant le Catalogue
+{
+    clearConsole();
+    cout << "#----------------------------------------------------------------------------------------------" << endl
+         << "#\t Sauvegarder le catalogue " << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#\t" << endl
+         << "#----------------------------------------------------------------------------------------------" << endl
+         << "Saisisser le nom du fichier de destination : ";
+
+    string fileName;
+    getline(cin, fileName);
+
+    ofstream f;
+    f.open(fileName);
+
+
+    // On vérifie que le fichier existe et est lisible & inscriptible
+
+    if (!f.is_open())
+    {
+        cout << "Erreur, impossible d'obtenir un flux d'écriture" << endl;
+        typeToContinue();
+        return;
+    }
+
+    // On prépare pour l'export des données
+
+    ListRoute *listRoute = catalog->GetListRoute();
+    Route *tmp;
+    string strRoute;
+
+
+    // Filter
+    string param1;
+    string param2;
+    FILTER filter = getFilter(param1, param2);
+    bool isValid = false;
+    unsigned int lineNumber = 0;
+
+
+    // Pour l'index on travaille sur la liste et non pas sur la route
+
+    if (filter == INDEX)
+    {
+        int n;
+        int m;
+
+        try
+        {
+            n = stoi(param1);
+            m = stoi(param2);
+        } catch (exception &e)
+        { // On récupère les deux exception (outrange & invalid argument)
+            cout << "Erreur, un des nombres rentrés sont invalides !" << endl;
+            typeToContinue();
+            f.close();
+            return;
+        }
+
+        ListRoute *filtered = listRoute->FilterSelect(n, m);
+
+        if (filtered == NULL)
+        {
+            cout << "Erreur, l'intervalle de la selection est incorrecte (nombre de trajet dans le catalogue : "
+                 << listRoute->GetSize() << " )" << endl;
+            typeToContinue();
+            f.close();
+            return;
+        }
+        listRoute = filtered;
+    }
+
+
+    // Common filters
+
+    for (unsigned int i = 0; i < listRoute->GetSize(); i++)
+    {
+        tmp = listRoute->GetElement(i);
+
+        switch (filter)
+        {
+            case NONE:
+                isValid = true;
+                break;
+            case TYPE:
+                isValid = (tmp->IsComposed() && param1 == COMPOSED_WORD)
+                          || (!tmp->IsComposed() && param1 == SIMPLE_WORD);
+                break;
+            case PASS_BY:
+                isValid = tmp->PassBy(param1, param2);
+                break;
+            case INDEX:
+                isValid = true; // Forcement vrai car déjà filtrer
+                break;
+            default:
+                break;
+        }
+        if (isValid)
+        {
+            f << (*tmp) << endl;
+            lineNumber++;
+        }
+    }
+
+    f.close();
+    cout << "Le fichier a bien été exporté, nombre de lignes : " << lineNumber << endl;
+    typeToContinue();
+    if (filter == INDEX)
+    { // On supprime que dans l'INDEX car on crée une autre à liste
+        delete listRoute;
+    }
 }
 
 
@@ -489,7 +730,7 @@ int main()
                     loadFile(catalog);
                     break;
                 case '6':
-                    // TODO Sauvegarder (dans catalog ou dans le main ?)
+                    saveCatalog(catalog);
                     break;
                 case 'a':
                     about();
